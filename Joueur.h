@@ -2,28 +2,27 @@
 #define JOUEUR_H
 
 #include "Entite.h"
-#include "Objet.h"
+#include "Objet.h" // Indispensable pour connaitre Item
+#include <vector>  // Indispensable pour utiliser std::vector
 
-// Player hérite publiquement de Entity
 class Player : public Entity {
 private:
-    std::vector<Item> inventaire;
     int tues;
     int epargnes;
     int victoires;
+    std::vector<Item> inventaire; // L'inventaire qui manquait !
 
 public:
-    // Constructeur
     Player(std::string _nom, int _pvMax, int _attaque, int _defense);
-
-    // Override de la méthode virtuelle pure de Entity
-    void afficherInfo() const override;
-
-    // Méthodes spécifiques au joueur
-    void ajouterVictoire(bool _mortDuMonstre);
-    int obtenirVictoires() const;
     
-    void ajouterObjet(Item _nouvelObjet);
+    void afficherInfo() const override;
+    void ajouterVictoire(bool mortDuMonstre);
+    int obtenirVictoires() const;
+    void soigner(int montant);
+    
+    // Ajout des méthodes pour gerer l'inventaire
+    void ajouterObjet(Item nouvelObjet);
+    void utiliserObjet(int index);
     void afficherInventaire() const;
 };
 

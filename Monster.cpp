@@ -10,8 +10,8 @@ Monster::Monster(std::string _nom, std::string _categorie, int _pvMax, int _atta
 }
 
 void Monster::afficherInfo() const {
-    std::cout << "[" << this->categorie << "] " << this->nom 
-              << " | HP: " << this->pv << "/" << this->pvMax 
+    std::cout << "[" << this->categorie << "] " << this->obtenirNom()
+              << " | HP: " << this->obtenirPv() << "/" << this->obtenirPvMax()
               << " | MERCY: " << this->jaugeMercy << "/" << this->objectifMercy << std::endl;
 }
 

@@ -11,6 +11,14 @@ std::string Item::obtenirNom() const {
     return this->nom;
 }
 
+std::string Item::obtenirType() const {
+    return this->type;
+}
+
+int Item::obtenirValeur() const {
+    return this->valeur;
+}
+
 int Item::obtenirQuantite() const {
     return this->quantite;
 }
@@ -24,6 +32,6 @@ bool Item::utiliser() {
 }
 
 void Item::afficherDescription() const {
-    std::cout << "- " << this->nom << " (" << this->type << " : " << this->valeur 
-              << ") [x" << this->quantite << "]" << std::endl;
+    std::cout << "- " << this->nom << " (" << this->type << " : +"
+              << this->valeur << " PV) [x" << this->quantite << "]" << std::endl;
 }

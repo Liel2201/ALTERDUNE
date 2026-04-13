@@ -3,31 +3,50 @@
 
 #include "Entite.h"
 
-// Classe abstraite Monster
+// ============================================================
+// Classe abstraite Monster : herite de Entity
+// Les attributs sont PRIVATE (conformes a l'UML et au bareme
+// encapsulation). On accede a tout via des getters.
+// La methode virtuelle pure obtenirNombreActions() force
+// chaque sous-classe a definir son propre nombre d'actions ACT.
+// ============================================================
 class Monster : public Entity {
-protected:
+private:
     std::string categorie;
     int jaugeMercy;
     int objectifMercy;
     std::vector<std::string> idsActions;
 
 public:
-    Monster(std::string _nom, std::string _categorie, int _pvMax, int _attaque, int _defense, int _objectifMercy);
+    Monster(std::string _nom, std::string _categorie, int _pvMax,
+            int _attaque, int _defense, int _objectifMercy);
 
+    // Affichage (override de Entity)
     void afficherInfo() const override;
-    
-    // Gestion du système MERCY
+
+    // Accesseurs (getters)
+    std::string obtenirCategorie() const;
+    int obtenirJaugeMercy() const;
+    int obtenirObjectifMercy() const;
+    std::vector<std::string> obtenirIdsActions() const;
+
+    // Systeme MERCY
     void modifierMercy(int _delta);
     bool estEpargnable() const;
-    
+
     // Ajout d'une action ACT disponible pour ce monstre
     void ajouterActionAct(std::string _idAction);
 
-    // Méthode virtuelle pure : force les classes filles à définir le nombre d'actions
-    virtual int obtenirNombreActions() const = 0; 
+    // Methode virtuelle pure : force les classes filles a definir le nombre d'actions
+    // En C# : public abstract int ObtenirNombreActions();
+    virtual int obtenirNombreActions() const = 0;
+
+    // Retourne les actions disponibles limitees par obtenirNombreActions()
+    // Utile pour le menu ACT en combat
+    std::vector<std::string> obtenirActDisponibles() const;
 };
 
-// --- CLASSES DÉRIVÉES ---
+// --- CLASSES DERIVEES ---
 
 class NormalMonster : public Monster {
 public:

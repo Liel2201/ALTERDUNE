@@ -9,45 +9,78 @@ Player::Player(std::string _nom, int _pvMax, int _attaque, int _defense)
 
 void Player::afficherInfo() const {
     std::cout << "=== JOUEUR : " << this->obtenirNom() << " ===" << std::endl;
-    std::cout << "HP : " << this->obtenirPv() << " / " << this->obtenirPvMax() << std::endl;
-    // CORRECTION : On utilise les méthodes obtenirAttaque() et obtenirDefense() !
-    std::cout << "ATK: " << this->obtenirAttaque() << " | DEF: " << this->obtenirDefense() << std::endl;
-    std::cout << "Victoires : " << this->victoires 
-              << " (Tues: " << this->tues << ", Epargnes: " << this->epargnes << ")" << std::endl;
+    std::cout << "PV  : " << this->obtenirPv() << " / " << this->obtenirPvMax() << std::endl;
+    std::cout << "ATK : " << this->obtenirAttaque()
+              << " | DEF : " << this->obtenirDefense() << std::endl;
+    std::cout << "Victoires : " << this->victoires << " / 10"
+              << " (Tues: " << this->tues
+              << ", Epargnes: " << this->epargnes << ")" << std::endl;
 }
 
 void Player::ajouterVictoire(bool mortDuMonstre) {
     this->victoires++;
-    if (mortDuMonstre) this->tues++;
-    else this->epargnes++;
+    if (mortDuMonstre) {
+        this->tues++;
+    } else {
+        this->epargnes++;
+    }
 }
 
 int Player::obtenirVictoires() const {
     return this->victoires;
 }
 
-void Player::soigner(int montant) {
-    // A coder plus tard (Combat)
+int Player::obtenirTues() const {
+    return this->tues;
 }
 
-// L'implémentation de l'ajout d'objet
+int Player::obtenirEpargnes() const {
+    return this->epargnes;
+}
+
+// ============================================================
+// Gestion de l'inventaire
+// ============================================================
 void Player::ajouterObjet(Item nouvelObjet) {
     this->inventaire.push_back(nouvelObjet);
 }
 
 void Player::utiliserObjet(int index) {
-    // A coder plus tard (Combat)
+    if (index < 0 || index >= (int)this->inventaire.size()) {
+        std::cout << "Index invalide !" << std::endl;
+        return;
+    }
+
+    Item& item = this->inventaire[index];
+
+    if (item.obtenirQuantite() <= 0) {
+        std::cout << "Vous n'avez plus de " << item.obtenirNom() << " !" << std::endl;
+        return;
+    }
+
+    if (item.obtenirType() == "HEAL") {
+        item.utiliser();
+        // soigner() est herite de Entity, il borne a pvMax automatiquement
+        this->soigner(item.obtenirValeur());
+        std::cout << "Vous utilisez " << item.obtenirNom()
+                  << " et recuperez " << item.obtenirValeur() << " PV !" << std::endl;
+        std::cout << "PV : " << this->obtenirPv()
+                  << "/" << this->obtenirPvMax() << std::endl;
+    }
 }
 
-// L'implémentation de l'affichage de l'inventaire
 void Player::afficherInventaire() const {
     std::cout << "\n--- INVENTAIRE ---" << std::endl;
-    if (inventaire.empty()) {
+    if (this->inventaire.empty()) {
         std::cout << "(Vide)" << std::endl;
         return;
     }
-    for (size_t i = 0; i < inventaire.size(); i++) {
-        std::cout << "- ";
-        inventaire[i].afficherDescription();
+    for (int i = 0; i < (int)this->inventaire.size(); i++) {
+        std::cout << "  [" << (i + 1) << "] ";
+        this->inventaire[i].afficherDescription();
     }
+}
+
+int Player::obtenirTailleInventaire() const {
+    return (int)this->inventaire.size();
 }

@@ -3,6 +3,10 @@
 
 #include "Utilitaires.h"
 
+// ============================================================
+// Classe abstraite Entity : classe mere pour Player et Monster
+// En C# : public abstract class Entity { ... }
+// ============================================================
 class Entity {
 private:
     std::string nom;
@@ -13,20 +17,24 @@ private:
 
 public:
     Entity(std::string _nom, int _pvMax, int _attaque, int _defense);
-    virtual ~Entity() {} // Toujours mettre un destructeur virtuel quand on utilise l'héritage
+    virtual ~Entity() {}
 
-    // Les fameux getters qui manquaient !
+    // Accesseurs
     std::string obtenirNom() const;
     int obtenirPv() const;
     int obtenirPvMax() const;
     int obtenirAttaque() const;
     int obtenirDefense() const;
-    
+
     bool estVivant() const;
     void subirDegats(int degats);
-    
-    // Méthode abstraite (virtuelle pure) car Entity ne s'affiche jamais directement
-    virtual void afficherInfo() const = 0; 
+
+    // soigner() est dans Entity car pv est private ici
+    // et conceptuellement, toute entite peut etre soignee
+    void soigner(int montant);
+
+    // Methode virtuelle pure
+    virtual void afficherInfo() const = 0;
 };
 
 #endif

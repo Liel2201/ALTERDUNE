@@ -15,6 +15,5 @@ int ActAction::obtenirImpact() const {
 }
 
 void ActAction::executer() const {
-    // Affiche le texte en italique ou avec un tiret pour le style
     std::cout << ">> " << this->texte << std::endl;
 }

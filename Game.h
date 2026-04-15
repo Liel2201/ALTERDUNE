@@ -8,9 +8,6 @@
 #include "ActAction.h"
 #include <map>
 
-// ============================================================
-// Classe BestiaryEntry : enregistre un monstre vaincu
-// ============================================================
 class BestiaryEntry {
 private:
     std::string nomMonstre;
@@ -30,7 +27,6 @@ public:
         this->defense = _def;
         this->aEteTue = _tue;
     }
-
     void afficher() const {
         std::cout << "- " << this->nomMonstre
                   << " [" << this->categorie << "]"
@@ -42,24 +38,16 @@ public:
     }
 };
 
-// ============================================================
-// Classe Game : orchestre toute la logique du jeu
-// ============================================================
 class Game {
 private:
     Player* joueurPtr;
     std::map<std::string, ActAction> catalogueActions;
     std::vector<Monster*> monstresDisponibles;
     std::vector<BestiaryEntry> bestiaire;
-
-    // Generateur aleatoire (recommande par le sujet au lieu de rand())
-    // En C# : Random rng = new Random();
     std::mt19937 rng;
-
     void initialiserCatalogue();
     bool chargerFichierObjets(std::string chemin);
     bool chargerFichierMonstres(std::string chemin);
-
     void afficherMenuPrincipal();
     void demarrerCombat();
     void afficherStatistiques();

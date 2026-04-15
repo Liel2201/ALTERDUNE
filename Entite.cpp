@@ -23,7 +23,6 @@ void Entity::subirDegats(int degats) {
     if (this->pv < 0) this->pv = 0;
 }
 
-// Restaure des PV sans depasser pvMax
 void Entity::soigner(int montant) {
     this->pv += montant;
     if (this->pv > this->pvMax) {

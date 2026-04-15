@@ -5,11 +5,6 @@
 #include "Objet.h"
 #include <vector>
 
-// ============================================================
-// Classe Player : herite de Entity
-// En C# : public class Player : Entity { ... }
-// soigner() est herite de Entity, pas besoin de le redeclarer
-// ============================================================
 class Player : public Entity {
 private:
     int tues;

@@ -32,25 +32,16 @@ void Game::initialiserCatalogue() {
     this->catalogueActions.insert({"THREATEN", ActAction("THREATEN", "Vous menacez le monstre du regard. Il serre les poings.", -15)});
 }
 
-// ============================================================
-// Chargement de items.csv
-// Format : nom;type;valeur;quantite
-// Gestion d'erreurs : fichier introuvable + lignes mal formees
-// ============================================================
 bool Game::chargerFichierObjets(std::string chemin) {
     std::ifstream fichier(chemin);
     if (!fichier.is_open()) {
         std::cout << "Erreur : impossible d'ouvrir le fichier '" << chemin << "'" << std::endl;
         return false;
     }
-
     std::string ligne;
     int numLigne = 0;
-
     while (std::getline(fichier, ligne)) {
         numLigne++;
-
-        // Ignorer les lignes vides
         if (ligne.empty()) continue;
 
         try {
@@ -77,31 +68,21 @@ bool Game::chargerFichierObjets(std::string chemin) {
                       << std::endl;
         }
     }
-
     fichier.close();
     return true;
 }
 
-// ============================================================
-// Chargement de monsters.csv
-// Format : categorie;nom;hp;atk;def;mercyGoal;act1;act2;act3;act4
-// Gestion d'erreurs : fichier introuvable + lignes mal formees
-// ============================================================
 bool Game::chargerFichierMonstres(std::string chemin) {
     std::ifstream fichier(chemin);
     if (!fichier.is_open()) {
         std::cout << "Erreur : impossible d'ouvrir le fichier '" << chemin << "'" << std::endl;
         return false;
     }
-
     std::string ligne;
     int numLigne = 0;
-
     while (std::getline(fichier, ligne)) {
         numLigne++;
-
         if (ligne.empty()) continue;
-
         try {
             std::stringstream ss(ligne);
             std::string cat, nom, hpStr, atkStr, defStr, mercyStr;
@@ -118,7 +99,6 @@ bool Game::chargerFichierMonstres(std::string chemin) {
                 continue;
             }
 
-            // Lire les identifiants ACT (certains peuvent etre absents)
             std::getline(ss, a1, ';');
             std::getline(ss, a2, ';');
             std::getline(ss, a3, ';');
@@ -129,7 +109,6 @@ bool Game::chargerFichierMonstres(std::string chemin) {
             int def = std::stoi(defStr);
             int mercy = std::stoi(mercyStr);
 
-            // Creation polymorphique du monstre selon la categorie
             Monster* m = nullptr;
             if (cat == "NORMAL") {
                 m = new NormalMonster(nom, hp, atk, def, mercy);
@@ -161,9 +140,6 @@ bool Game::chargerFichierMonstres(std::string chemin) {
     return true;
 }
 
-// ============================================================
-// Affichage du menu principal
-// ============================================================
 void Game::afficherMenuPrincipal() {
     std::cout << "\n=== ALTERDUNE : MENU PRINCIPAL ===" << std::endl;
     std::cout << "1. Partir au combat" << std::endl;
@@ -174,11 +150,7 @@ void Game::afficherMenuPrincipal() {
     std::cout << "Votre choix : ";
 }
 
-// ============================================================
-// Point d'entree principal
-// ============================================================
 void Game::lancer() {
-    // 1. Saisie du nom du joueur
     std::string nomJoueur;
     std::cout << "========================================" << std::endl;
     std::cout << "       BIENVENUE DANS ALTERDUNE" << std::endl;
@@ -186,10 +158,8 @@ void Game::lancer() {
     std::cout << "Entrez le nom de votre personnage : ";
     std::getline(std::cin, nomJoueur);
 
-    // 2. Creation du joueur
     this->joueurPtr = new Player(nomJoueur, 100, 15, 5);
 
-    // 3. Chargement des fichiers CSV
     std::cout << "\nChargement des donnees..." << std::endl;
     if (!this->chargerFichierObjets("items.csv")) {
         std::cout << "Erreur critique : arret du programme." << std::endl;
@@ -202,19 +172,14 @@ void Game::lancer() {
         return;
     }
     std::cout << "  Monstres charges avec succes." << std::endl;
-
-    // 4. Resume de depart
     std::cout << std::endl;
     this->joueurPtr->afficherInfo();
     this->joueurPtr->afficherInventaire();
 
-    // 5. Boucle du menu principal
     int choix = 0;
     while (choix != 5) {
         this->afficherMenuPrincipal();
         std::cin >> choix;
-
-        // Protection contre les saisies invalides (point 6 de l'audit)
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
@@ -222,7 +187,6 @@ void Game::lancer() {
             choix = 0;
             continue;
         }
-
         switch (choix) {
             case 1: this->demarrerCombat(); break;
             case 2: this->afficherStatistiques(); break;
@@ -233,21 +197,12 @@ void Game::lancer() {
         }
     }
 }
-
-// ============================================================
-// Combat (a implementer)
-// ============================================================
 void Game::demarrerCombat() {
     std::cout << "\n[Combat en cours de developpement...]" << std::endl;
 }
-
-// ============================================================
-// Sous-menus
-// ============================================================
 void Game::afficherStatistiques() {
     this->joueurPtr->afficherInfo();
 }
-
 void Game::afficherBestiaire() {
     std::cout << "\n--- BESTIAIRE ---" << std::endl;
     if (this->bestiaire.empty()) {
@@ -257,14 +212,9 @@ void Game::afficherBestiaire() {
         entry.afficher();
     }
 }
-
-// ============================================================
-// Fin de partie (a completer avec demarrerCombat)
-// ============================================================
 bool Game::verifierFinDePartie() const {
     return this->joueurPtr->obtenirVictoires() >= 10;
 }
 
 void Game::afficherFin() const {
-    // A implementer quand le combat sera code
 }

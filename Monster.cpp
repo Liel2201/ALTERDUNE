@@ -1,8 +1,5 @@
 #include "Monster.h"
 
-// ============================================================
-// Constructeur de Monster
-// ============================================================
 Monster::Monster(std::string _nom, std::string _categorie, int _pvMax,
                  int _attaque, int _defense, int _objectifMercy)
     : Entity(_nom, _pvMax, _attaque, _defense)
@@ -12,9 +9,6 @@ Monster::Monster(std::string _nom, std::string _categorie, int _pvMax,
     this->objectifMercy = _objectifMercy;
 }
 
-// ============================================================
-// Accesseurs (getters)
-// ============================================================
 std::string Monster::obtenirCategorie() const {
     return this->categorie;
 }
@@ -31,9 +25,6 @@ std::vector<std::string> Monster::obtenirIdsActions() const {
     return this->idsActions;
 }
 
-// ============================================================
-// Affichage
-// ============================================================
 void Monster::afficherInfo() const {
     std::cout << "[" << this->categorie << "] " << this->obtenirNom()
               << " | PV: " << this->obtenirPv() << "/" << this->obtenirPvMax()
@@ -41,9 +32,6 @@ void Monster::afficherInfo() const {
               << std::endl;
 }
 
-// ============================================================
-// Systeme MERCY
-// ============================================================
 void Monster::modifierMercy(int _delta) {
     this->jaugeMercy += _delta;
     this->jaugeMercy = std::clamp(this->jaugeMercy, 0, this->objectifMercy);
@@ -53,15 +41,10 @@ bool Monster::estEpargnable() const {
     return this->jaugeMercy >= this->objectifMercy;
 }
 
-// ============================================================
-// Gestion des actions ACT
-// ============================================================
 void Monster::ajouterActionAct(std::string _idAction) {
     this->idsActions.push_back(_idAction);
 }
 
-// Retourne uniquement les N premieres actions valides
-// selon la categorie (2 pour NORMAL, 3 pour MINIBOSS, 4 pour BOSS)
 std::vector<std::string> Monster::obtenirActDisponibles() const {
     std::vector<std::string> disponibles;
     int nombre = this->obtenirNombreActions();
@@ -73,9 +56,6 @@ std::vector<std::string> Monster::obtenirActDisponibles() const {
     return disponibles;
 }
 
-// ============================================================
-// Classes derivees (polymorphisme)
-// ============================================================
 NormalMonster::NormalMonster(std::string _nom, int _pvMax, int _atk, int _def, int _objectifMercy)
     : Monster(_nom, "NORMAL", _pvMax, _atk, _def, _objectifMercy) {}
 

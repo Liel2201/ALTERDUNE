@@ -37,10 +37,6 @@ int Player::obtenirTues() const {
 int Player::obtenirEpargnes() const {
     return this->epargnes;
 }
-
-// ============================================================
-// Gestion de l'inventaire
-// ============================================================
 void Player::ajouterObjet(Item nouvelObjet) {
     this->inventaire.push_back(nouvelObjet);
 }
@@ -60,7 +56,6 @@ void Player::utiliserObjet(int index) {
 
     if (item.obtenirType() == "HEAL") {
         item.utiliser();
-        // soigner() est herite de Entity, il borne a pvMax automatiquement
         this->soigner(item.obtenirValeur());
         std::cout << "Vous utilisez " << item.obtenirNom()
                   << " et recuperez " << item.obtenirValeur() << " PV !" << std::endl;

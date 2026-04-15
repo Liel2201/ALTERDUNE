@@ -3,7 +3,6 @@
 
 #include "Utilitaires.h"
 
-// Classe représentant une action pacifique (ACT) que le joueur peut faire en combat
 class ActAction {
 private:
     std::string id;          

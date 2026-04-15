@@ -20,8 +20,6 @@ public:
     int obtenirVictoires() const;
     int obtenirTues() const;
     int obtenirEpargnes() const;
-
-    // Gestion de l'inventaire
     void ajouterObjet(Item nouvelObjet);
     void utiliserObjet(int index);
     void afficherInventaire() const;

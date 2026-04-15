@@ -1,8 +1,5 @@
 #include "Game.h"
 
-// ============================================================
-// Constructeur / Destructeur
-// ============================================================
 Game::Game() {
     this->joueurPtr = nullptr;
     this->initialiserCatalogue();
@@ -15,9 +12,6 @@ Game::~Game() {
     }
 }
 
-// ============================================================
-// Catalogue d'actions ACT (10 actions, dont 2 negatives)
-// ============================================================
 void Game::initialiserCatalogue() {
     this->catalogueActions.insert({"COMPLIMENT", ActAction("COMPLIMENT", "Vous dites au monstre qu'il a un joli sourire.", 20)});
     this->catalogueActions.insert({"JOKE", ActAction("JOKE", "Pourquoi les plongeurs plongent-ils toujours en arriere ? Parce que sinon ils tombent dans le bateau.", 15)});
@@ -27,7 +21,6 @@ void Game::initialiserCatalogue() {
     this->catalogueActions.insert({"OFFER_SNACK", ActAction("OFFER_SNACK", "Vous partagez un bout de votre gouter.", 30)});
     this->catalogueActions.insert({"OBSERVE", ActAction("OBSERVE", "Vous le regardez fixement sans rien dire.", 0)});
     this->catalogueActions.insert({"REASON", ActAction("REASON", "Vous tentez de raisonner le monstre avec des arguments logiques.", 10)});
-    // Actions negatives (minimum 2 exigees par le sujet)
     this->catalogueActions.insert({"INSULT", ActAction("INSULT", "Vous dites que sa maman est un dictionnaire.", -10)});
     this->catalogueActions.insert({"THREATEN", ActAction("THREATEN", "Vous menacez le monstre du regard. Il serre les poings.", -15)});
 }

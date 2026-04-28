@@ -58,6 +58,7 @@ private:
     void initialiserCatalogue();
     bool chargerFichierObjets(std::string chemin);
     bool chargerFichierMonstres(std::string chemin);
+    Monster* creerCopieMonstre(Monster* modele);
     void afficherMenuPrincipal();
     void demarrerCombat();
     void afficherStatistiques();

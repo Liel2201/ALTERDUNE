@@ -2,6 +2,10 @@
 
 Game::Game() {
     this->joueurPtr = nullptr;
+
+    std::random_device rd;
+    this->rng = std::mt19937(rd());
+
     this->initialiserCatalogue();
 }
 
@@ -294,6 +298,46 @@ void Game::lancer() {
     }
 }
 
+Monster* Game::creerCopieMonstre(Monster* modele) {
+    Monster* copie = nullptr;
+
+    if (modele->obtenirCategorie() == "NORMAL") {
+        copie = new NormalMonster(
+            modele->obtenirNom(),
+            modele->obtenirPvMax(),
+            modele->obtenirAttaque(),
+            modele->obtenirDefense(),
+            modele->obtenirObjectifMercy()
+        );
+    } else if (modele->obtenirCategorie() == "MINIBOSS") {
+        copie = new MiniBossMonster(
+            modele->obtenirNom(),
+            modele->obtenirPvMax(),
+            modele->obtenirAttaque(),
+            modele->obtenirDefense(),
+            modele->obtenirObjectifMercy()
+        );
+    } else if (modele->obtenirCategorie() == "BOSS") {
+        copie = new BossMonster(
+            modele->obtenirNom(),
+            modele->obtenirPvMax(),
+            modele->obtenirAttaque(),
+            modele->obtenirDefense(),
+            modele->obtenirObjectifMercy()
+        );
+    }
+
+    if (copie != nullptr) {
+        std::vector<std::string> actions = modele->obtenirIdsActions();
+
+        for (int i = 0; i < (int)actions.size(); i++) {
+            copie->ajouterActionAct(actions[i]);
+        }
+    }
+
+    return copie;
+}
+
 void Game::demarrerCombat() {
     if (this->monstresDisponibles.empty()) {
         std::cout << "\nAucun monstre disponible. Impossible de lancer un combat." << std::endl;
@@ -303,50 +347,77 @@ void Game::demarrerCombat() {
     std::uniform_int_distribution<int> distribution(0, (int)this->monstresDisponibles.size() - 1);
     int indiceMonstre = distribution(this->rng);
 
-    Monster* monstre = this->monstresDisponibles[indiceMonstre];
+    Monster* modele = this->monstresDisponibles[indiceMonstre];
+    Monster* monstre = this->creerCopieMonstre(modele);
+
+    if (monstre == nullptr) {
+        std::cout << "\nErreur : impossible de creer une copie du monstre." << std::endl;
+        return;
+    }
 
     std::cout << "\nUn monstre apparait !" << std::endl;
-    monstre->afficherInfo();
 
-    std::string choix;
-    bool choixValide = false;
+    while (monstre->estVivant() && this->joueurPtr->estVivant()) {
+        monstre->afficherInfo();
 
-    while (!choixValide) {
-        std::cout << "\nQue voulez-vous faire ?" << std::endl;
-        std::cout << "1. FIGHT" << std::endl;
-        std::cout << "2. ACT" << std::endl;
-        std::cout << "3. ITEM" << std::endl;
-        std::cout << "4. MERCY" << std::endl;
-        std::cout << "Votre choix : ";
+        std::string choix;
+        bool choixValide = false;
 
-        std::cin >> choix;
+        while (!choixValide) {
+            std::cout << "\nQue voulez-vous faire ?" << std::endl;
+            std::cout << "1. FIGHT" << std::endl;
+            std::cout << "2. ACT" << std::endl;
+            std::cout << "3. ITEM" << std::endl;
+            std::cout << "4. MERCY" << std::endl;
+            std::cout << "Votre choix : ";
 
-        for (int i = 0; i < (int)choix.size(); i++) {
-            choix[i] = std::toupper(choix[i]);
+            std::cin >> choix;
+
+            choix = nettoyerTexte(choix);
+
+            for (int i = 0; i < (int)choix.size(); i++) {
+                choix[i] = std::toupper(choix[i]);
+            }
+
+            if (choix == "1" || choix == "FIGHT") {
+                std::cout << "\nVous attaquez le monstre !" << std::endl;
+
+                std::uniform_int_distribution<int> distributionDegats(0, monstre->obtenirPvMax());
+                int degats = distributionDegats(this->rng);
+
+                if (degats == 0) {
+                    std::cout << "Votre attaque rate ! Aucun degat inflige." << std::endl;
+                } else {
+                    monstre->subirDegats(degats);
+                    std::cout << "Vous infligez " << degats << " degats au monstre." << std::endl;
+                }
+
+                choixValide = true;
+            } else if (choix == "2" || choix == "ACT") {
+                std::cout << "\nVous avez choisi ACT." << std::endl;
+                std::cout << "[Cette action sera codee ensuite.]" << std::endl;
+                choixValide = true;
+            } else if (choix == "3" || choix == "ITEM") {
+                std::cout << "\nVous avez choisi ITEM." << std::endl;
+                std::cout << "[Cette action sera codee ensuite.]" << std::endl;
+                choixValide = true;
+            } else if (choix == "4" || choix == "MERCY") {
+                std::cout << "\nVous avez choisi MERCY." << std::endl;
+                std::cout << "[Cette action sera codee ensuite.]" << std::endl;
+                choixValide = true;
+            } else {
+                std::cout << "\nChoix invalide. Veuillez taper 1, 2, 3, 4 ou FIGHT, ACT, ITEM, MERCY." << std::endl;
+            }
         }
 
-        if (choix == "1" || choix == "FIGHT") {
-            std::cout << "\nVous avez choisi FIGHT." << std::endl;
-            std::cout << "[Cette action sera codee ensuite.]" << std::endl;
-            choixValide = true;
-        } else if (choix == "2" || choix == "ACT") {
-            std::cout << "\nVous avez choisi ACT." << std::endl;
-            std::cout << "[Cette action sera codee ensuite.]" << std::endl;
-            choixValide = true;
-        } else if (choix == "3" || choix == "ITEM") {
-            std::cout << "\nVous avez choisi ITEM." << std::endl;
-            std::cout << "[Cette action sera codee ensuite.]" << std::endl;
-            choixValide = true;
-        } else if (choix == "4" || choix == "MERCY") {
-            std::cout << "\nVous avez choisi MERCY." << std::endl;
-            std::cout << "[Cette action sera codee ensuite.]" << std::endl;
-            choixValide = true;
-        } else {
-            std::cout << "\nChoix invalide. Veuillez taper 1, 2, 3, 4 ou FIGHT, ACT, ITEM, MERCY." << std::endl;
+        if (!monstre->estVivant()) {
+            std::cout << "\nLe monstre est vaincu !" << std::endl;
         }
     }
 
-    std::cout << "\n[Le vrai combat sera ajoute ensuite...]" << std::endl;
+    std::cout << "\n[Le tour du monstre sera ajoute ensuite...]" << std::endl;
+
+    delete monstre;
 }
 
 void Game::afficherStatistiques() {

@@ -27,13 +27,22 @@ public:
         this->defense = _def;
         this->aEteTue = _tue;
     }
+
     void afficher() const {
+        std::string resultat;
+
+        if (this->aEteTue) {
+            resultat = "Tue";
+        } else {
+            resultat = "Epargne";
+        }
+
         std::cout << "- " << this->nomMonstre
                   << " [" << this->categorie << "]"
                   << " | PV Max: " << this->pvMax
                   << " | ATK: " << this->attaque
                   << " | DEF: " << this->defense
-                  << " | Resultat: " << (this->aEteTue ? "Tue" : "Epargne")
+                  << " | Resultat: " << resultat
                   << std::endl;
     }
 };
@@ -45,6 +54,7 @@ private:
     std::vector<Monster*> monstresDisponibles;
     std::vector<BestiaryEntry> bestiaire;
     std::mt19937 rng;
+
     void initialiserCatalogue();
     bool chargerFichierObjets(std::string chemin);
     bool chargerFichierMonstres(std::string chemin);

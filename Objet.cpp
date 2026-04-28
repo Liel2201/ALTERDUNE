@@ -27,8 +27,9 @@ bool Item::utiliser() {
     if (this->quantite > 0) {
         this->quantite--;
         return true;
+    } else {
+        return false;
     }
-    return false;
 }
 
 void Item::afficherDescription() const {

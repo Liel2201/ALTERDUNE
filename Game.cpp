@@ -7,8 +7,9 @@ Game::Game() {
 
 Game::~Game() {
     delete this->joueurPtr;
-    for (Monster* m : this->monstresDisponibles) {
-        delete m;
+
+    for (int i = 0; i < (int)this->monstresDisponibles.size(); i++) {
+        delete this->monstresDisponibles[i];
     }
 }
 
@@ -27,19 +28,28 @@ void Game::initialiserCatalogue() {
 
 bool Game::chargerFichierObjets(std::string chemin) {
     std::ifstream fichier(chemin);
+
     if (!fichier.is_open()) {
         std::cout << "Erreur : impossible d'ouvrir le fichier '" << chemin << "'" << std::endl;
         return false;
     }
+
     std::string ligne;
     int numLigne = 0;
+
     while (std::getline(fichier, ligne)) {
         numLigne++;
-        if (ligne.empty()) continue;
+
+        if (ligne.empty()) {
+            continue;
+        }
 
         try {
             std::stringstream ss(ligne);
-            std::string nom, type, valeurStr, quantiteStr;
+            std::string nom;
+            std::string type;
+            std::string valeurStr;
+            std::string quantiteStr;
 
             if (!std::getline(ss, nom, ';') ||
                 !std::getline(ss, type, ';') ||
@@ -61,25 +71,43 @@ bool Game::chargerFichierObjets(std::string chemin) {
                       << std::endl;
         }
     }
+
     fichier.close();
     return true;
 }
 
 bool Game::chargerFichierMonstres(std::string chemin) {
     std::ifstream fichier(chemin);
+
     if (!fichier.is_open()) {
         std::cout << "Erreur : impossible d'ouvrir le fichier '" << chemin << "'" << std::endl;
         return false;
     }
+
     std::string ligne;
     int numLigne = 0;
+
     while (std::getline(fichier, ligne)) {
         numLigne++;
-        if (ligne.empty()) continue;
+
+        if (ligne.empty()) {
+            continue;
+        }
+
         try {
             std::stringstream ss(ligne);
-            std::string cat, nom, hpStr, atkStr, defStr, mercyStr;
-            std::string a1, a2, a3, a4;
+
+            std::string cat;
+            std::string nom;
+            std::string hpStr;
+            std::string atkStr;
+            std::string defStr;
+            std::string mercyStr;
+
+            std::string a1;
+            std::string a2;
+            std::string a3;
+            std::string a4;
 
             if (!std::getline(ss, cat, ';') ||
                 !std::getline(ss, nom, ';') ||
@@ -103,6 +131,7 @@ bool Game::chargerFichierMonstres(std::string chemin) {
             int mercy = std::stoi(mercyStr);
 
             Monster* m = nullptr;
+
             if (cat == "NORMAL") {
                 m = new NormalMonster(nom, hp, atk, def, mercy);
             } else if (cat == "MINIBOSS") {
@@ -115,10 +144,21 @@ bool Game::chargerFichierMonstres(std::string chemin) {
                 continue;
             }
 
-            if (a1 != "-" && !a1.empty()) m->ajouterActionAct(a1);
-            if (a2 != "-" && !a2.empty()) m->ajouterActionAct(a2);
-            if (a3 != "-" && !a3.empty()) m->ajouterActionAct(a3);
-            if (a4 != "-" && !a4.empty()) m->ajouterActionAct(a4);
+            if (a1 != "-" && !a1.empty()) {
+                m->ajouterActionAct(a1);
+            }
+
+            if (a2 != "-" && !a2.empty()) {
+                m->ajouterActionAct(a2);
+            }
+
+            if (a3 != "-" && !a3.empty()) {
+                m->ajouterActionAct(a3);
+            }
+
+            if (a4 != "-" && !a4.empty()) {
+                m->ajouterActionAct(a4);
+            }
 
             this->monstresDisponibles.push_back(m);
 
@@ -145,6 +185,7 @@ void Game::afficherMenuPrincipal() {
 
 void Game::lancer() {
     std::string nomJoueur;
+
     std::cout << "========================================" << std::endl;
     std::cout << "       BIENVENUE DANS ALTERDUNE" << std::endl;
     std::cout << "========================================" << std::endl;
@@ -154,25 +195,31 @@ void Game::lancer() {
     this->joueurPtr = new Player(nomJoueur, 100, 15, 5);
 
     std::cout << "\nChargement des donnees..." << std::endl;
+
     if (!this->chargerFichierObjets("items.csv")) {
         std::cout << "Erreur critique : arret du programme." << std::endl;
         return;
     }
+
     std::cout << "  Items charges avec succes." << std::endl;
 
     if (!this->chargerFichierMonstres("monsters.csv")) {
         std::cout << "Erreur critique : arret du programme." << std::endl;
         return;
     }
+
     std::cout << "  Monstres charges avec succes." << std::endl;
     std::cout << std::endl;
+
     this->joueurPtr->afficherInfo();
     this->joueurPtr->afficherInventaire();
 
     int choix = 0;
+
     while (choix != 5) {
         this->afficherMenuPrincipal();
         std::cin >> choix;
+
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
@@ -180,31 +227,55 @@ void Game::lancer() {
             choix = 0;
             continue;
         }
+
         switch (choix) {
-            case 1: this->demarrerCombat(); break;
-            case 2: this->afficherStatistiques(); break;
-            case 3: this->joueurPtr->afficherInventaire(); break;
-            case 4: this->afficherBestiaire(); break;
-            case 5: std::cout << "Au revoir !" << std::endl; break;
-            default: std::cout << "Choix invalide." << std::endl;
+            case 1:
+                this->demarrerCombat();
+                break;
+
+            case 2:
+                this->afficherStatistiques();
+                break;
+
+            case 3:
+                this->joueurPtr->afficherInventaire();
+                break;
+
+            case 4:
+                this->afficherBestiaire();
+                break;
+
+            case 5:
+                std::cout << "Au revoir !" << std::endl;
+                break;
+
+            default:
+                std::cout << "Choix invalide." << std::endl;
+                break;
         }
     }
 }
+
 void Game::demarrerCombat() {
     std::cout << "\n[Combat en cours de developpement...]" << std::endl;
 }
+
 void Game::afficherStatistiques() {
     this->joueurPtr->afficherInfo();
 }
+
 void Game::afficherBestiaire() {
     std::cout << "\n--- BESTIAIRE ---" << std::endl;
+
     if (this->bestiaire.empty()) {
         std::cout << "Aucun monstre rencontre pour le moment." << std::endl;
     }
-    for (const auto& entry : this->bestiaire) {
-        entry.afficher();
+
+    for (int i = 0; i < (int)this->bestiaire.size(); i++) {
+        this->bestiaire[i].afficher();
     }
 }
+
 bool Game::verifierFinDePartie() const {
     return this->joueurPtr->obtenirVictoires() >= 10;
 }

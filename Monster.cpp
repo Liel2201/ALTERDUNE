@@ -34,7 +34,14 @@ void Monster::afficherInfo() const {
 
 void Monster::modifierMercy(int _delta) {
     this->jaugeMercy += _delta;
-    this->jaugeMercy = std::clamp(this->jaugeMercy, 0, this->objectifMercy);
+
+    if (this->jaugeMercy < 0) {
+        this->jaugeMercy = 0;
+    }
+
+    if (this->jaugeMercy > this->objectifMercy) {
+        this->jaugeMercy = this->objectifMercy;
+    }
 }
 
 bool Monster::estEpargnable() const {
@@ -48,11 +55,13 @@ void Monster::ajouterActionAct(std::string _idAction) {
 std::vector<std::string> Monster::obtenirActDisponibles() const {
     std::vector<std::string> disponibles;
     int nombre = this->obtenirNombreActions();
+
     for (int i = 0; i < nombre && i < (int)this->idsActions.size(); i++) {
         if (this->idsActions[i] != "-") {
             disponibles.push_back(this->idsActions[i]);
         }
     }
+
     return disponibles;
 }
 

@@ -308,6 +308,44 @@ void Game::demarrerCombat() {
     std::cout << "\nUn monstre apparait !" << std::endl;
     monstre->afficherInfo();
 
+    std::string choix;
+    bool choixValide = false;
+
+    while (!choixValide) {
+        std::cout << "\nQue voulez-vous faire ?" << std::endl;
+        std::cout << "1. FIGHT" << std::endl;
+        std::cout << "2. ACT" << std::endl;
+        std::cout << "3. ITEM" << std::endl;
+        std::cout << "4. MERCY" << std::endl;
+        std::cout << "Votre choix : ";
+
+        std::cin >> choix;
+
+        for (int i = 0; i < (int)choix.size(); i++) {
+            choix[i] = std::toupper(choix[i]);
+        }
+
+        if (choix == "1" || choix == "FIGHT") {
+            std::cout << "\nVous avez choisi FIGHT." << std::endl;
+            std::cout << "[Cette action sera codee ensuite.]" << std::endl;
+            choixValide = true;
+        } else if (choix == "2" || choix == "ACT") {
+            std::cout << "\nVous avez choisi ACT." << std::endl;
+            std::cout << "[Cette action sera codee ensuite.]" << std::endl;
+            choixValide = true;
+        } else if (choix == "3" || choix == "ITEM") {
+            std::cout << "\nVous avez choisi ITEM." << std::endl;
+            std::cout << "[Cette action sera codee ensuite.]" << std::endl;
+            choixValide = true;
+        } else if (choix == "4" || choix == "MERCY") {
+            std::cout << "\nVous avez choisi MERCY." << std::endl;
+            std::cout << "[Cette action sera codee ensuite.]" << std::endl;
+            choixValide = true;
+        } else {
+            std::cout << "\nChoix invalide. Veuillez taper 1, 2, 3, 4 ou FIGHT, ACT, ITEM, MERCY." << std::endl;
+        }
+    }
+
     std::cout << "\n[Le vrai combat sera ajoute ensuite...]" << std::endl;
 }
 

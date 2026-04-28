@@ -393,18 +393,74 @@ void Game::demarrerCombat() {
                 }
 
                 choixValide = true;
+
             } else if (choix == "2" || choix == "ACT") {
-                std::cout << "\nVous avez choisi ACT." << std::endl;
-                std::cout << "[Cette action sera codee ensuite.]" << std::endl;
-                choixValide = true;
+                std::vector<std::string> actionsDisponibles = monstre->obtenirActDisponibles();
+
+                if (actionsDisponibles.empty()) {
+                    std::cout << "\nCe monstre n'a aucune action ACT disponible." << std::endl;
+                    choixValide = true;
+                } else {
+                    std::string choixAct;
+                    bool actionValide = false;
+
+                    while (!actionValide) {
+                        std::cout << "\nActions ACT disponibles :" << std::endl;
+
+                        for (int i = 0; i < (int)actionsDisponibles.size(); i++) {
+                            std::cout << i + 1 << ". " << actionsDisponibles[i] << std::endl;
+                        }
+
+                        std::cout << "Votre choix : ";
+                        std::cin >> choixAct;
+
+                        try {
+                            int indiceAction = std::stoi(choixAct);
+
+                            if (indiceAction >= 1 && indiceAction <= (int)actionsDisponibles.size()) {
+                                std::string idAction = actionsDisponibles[indiceAction - 1];
+
+                                std::map<std::string, ActAction>::iterator itAction;
+                                itAction = this->catalogueActions.find(idAction);
+
+                                std::cout << std::endl;
+                                itAction->second.executer();
+
+                                int impact = itAction->second.obtenirImpact();
+                                monstre->modifierMercy(impact);
+
+                                if (impact > 0) {
+                                    std::cout << "La Mercy augmente de " << impact << "." << std::endl;
+                                } else if (impact < 0) {
+                                    std::cout << "La Mercy diminue de " << -impact << "." << std::endl;
+                                } else {
+                                    std::cout << "La Mercy ne change pas." << std::endl;
+                                }
+
+                                monstre->afficherInfo();
+
+                                actionValide = true;
+                                choixValide = true;
+                            } else {
+                                std::cout << "Choix invalide. Veuillez choisir une action de la liste." << std::endl;
+                            }
+
+                        } catch (const std::exception& e) {
+                            std::cout << "Saisie invalide. Veuillez entrer un nombre." << std::endl;
+                        }
+                    }
+                }
+
             } else if (choix == "3" || choix == "ITEM") {
                 std::cout << "\nVous avez choisi ITEM." << std::endl;
                 std::cout << "[Cette action sera codee ensuite.]" << std::endl;
                 choixValide = true;
+
             } else if (choix == "4" || choix == "MERCY") {
                 std::cout << "\nVous avez choisi MERCY." << std::endl;
                 std::cout << "[Cette action sera codee ensuite.]" << std::endl;
                 choixValide = true;
+
             } else {
                 std::cout << "\nChoix invalide. Veuillez taper 1, 2, 3, 4 ou FIGHT, ACT, ITEM, MERCY." << std::endl;
             }
@@ -412,10 +468,41 @@ void Game::demarrerCombat() {
 
         if (!monstre->estVivant()) {
             std::cout << "\nLe monstre est vaincu !" << std::endl;
+            std::cout << "Vous remportez le combat en tuant le monstre." << std::endl;
+
+            this->joueurPtr->ajouterVictoire(true);
+
+            BestiaryEntry entree(
+                monstre->obtenirNom(),
+                monstre->obtenirCategorie(),
+                monstre->obtenirPvMax(),
+                monstre->obtenirAttaque(),
+                monstre->obtenirDefense(),
+                true
+            );
+
+            this->bestiaire.push_back(entree);
+        } else {
+            std::cout << "\nLe monstre attaque !" << std::endl;
+
+            std::uniform_int_distribution<int> distributionDegatsMonstre(0, this->joueurPtr->obtenirPvMax());
+            int degatsMonstre = distributionDegatsMonstre(this->rng);
+
+            if (degatsMonstre == 0) {
+                std::cout << "Le monstre rate son attaque ! Aucun degat recu." << std::endl;
+            } else {
+                this->joueurPtr->subirDegats(degatsMonstre);
+                std::cout << "Le monstre vous inflige " << degatsMonstre << " degats." << std::endl;
+            }
+
+            this->joueurPtr->afficherInfo();
+
+            if (!this->joueurPtr->estVivant()) {
+                std::cout << "\nVous avez ete vaincu..." << std::endl;
+                std::cout << "La partie est terminee." << std::endl;
+            }
         }
     }
-
-    std::cout << "\n[Le tour du monstre sera ajoute ensuite...]" << std::endl;
 
     delete monstre;
 }

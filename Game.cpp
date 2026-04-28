@@ -397,34 +397,47 @@ void Game::demarrerCombat() {
 
     bool combatGagne = false;
 
-    std::cout << "\nUn monstre apparait !" << std::endl;
-    std::cout << monstre->obtenirNom()
-              << " [" << monstre->obtenirCategorie() << "]"
-              << std::endl;
+    std::cout << "\n========================================" << std::endl;
+    std::cout << "                COMBAT" << std::endl;
+    std::cout << "========================================" << std::endl;
+    std::cout << "Un monstre apparait !" << std::endl;
+    std::cout << "Nom       : " << monstre->obtenirNom() << std::endl;
+    std::cout << "Categorie : " << monstre->obtenirCategorie() << std::endl;
+    std::cout << "========================================" << std::endl;
 
     while (monstre->estVivant() && this->joueurPtr->estVivant() && !combatGagne) {
-        std::cout << "\n--- ETAT DU COMBAT ---" << std::endl;
-        std::cout << "Joueur  : " << this->joueurPtr->obtenirPv()
-                  << " / " << this->joueurPtr->obtenirPvMax()
+        std::cout << "\n------------- ETAT DU COMBAT ------------" << std::endl;
+        std::cout << "Joueur  : "
+                  << this->joueurPtr->obtenirPv()
+                  << " / "
+                  << this->joueurPtr->obtenirPvMax()
                   << " PV" << std::endl;
 
-        std::cout << "Monstre : " << monstre->obtenirNom()
-                  << " | " << monstre->obtenirPv()
-                  << " / " << monstre->obtenirPvMax()
-                  << " PV"
-                  << " | Mercy : " << monstre->obtenirJaugeMercy()
-                  << " / " << monstre->obtenirObjectifMercy()
+        std::cout << "Monstre : "
+                  << monstre->obtenirNom()
+                  << " | "
+                  << monstre->obtenirPv()
+                  << " / "
+                  << monstre->obtenirPvMax()
+                  << " PV" << std::endl;
+
+        std::cout << "Mercy   : "
+                  << monstre->obtenirJaugeMercy()
+                  << " / "
+                  << monstre->obtenirObjectifMercy()
                   << std::endl;
+        std::cout << "-----------------------------------------" << std::endl;
 
         int choix = 0;
         bool choixValide = false;
 
         while (!choixValide) {
-            std::cout << "\nQue voulez-vous faire ?" << std::endl;
+            std::cout << "\n--------------- ACTIONS ----------------" << std::endl;
             std::cout << "1. FIGHT" << std::endl;
             std::cout << "2. ACT" << std::endl;
             std::cout << "3. ITEM" << std::endl;
             std::cout << "4. MERCY" << std::endl;
+            std::cout << "-----------------------------------------" << std::endl;
             std::cout << "Votre choix : ";
 
             std::cin >> choix;
@@ -464,12 +477,13 @@ void Game::demarrerCombat() {
                     bool actionValide = false;
 
                     while (!actionValide) {
-                        std::cout << "\nActions ACT disponibles :" << std::endl;
+                        std::cout << "\n------------- ACTIONS ACT --------------" << std::endl;
 
                         for (int i = 0; i < (int)actionsDisponibles.size(); i++) {
                             std::cout << i + 1 << ". " << actionsDisponibles[i] << std::endl;
                         }
 
+                        std::cout << "-----------------------------------------" << std::endl;
                         std::cout << "Votre choix : ";
                         std::cin >> choixAct;
 
@@ -544,12 +558,16 @@ void Game::demarrerCombat() {
 
             } else if (choix == 4) {
                 if (monstre->estEpargnable()) {
-                    std::cout << "\nVous epargnez le monstre." << std::endl;
+                    std::cout << "\n========================================" << std::endl;
+                    std::cout << "               VICTOIRE" << std::endl;
+                    std::cout << "========================================" << std::endl;
+                    std::cout << "Vous epargnez " << monstre->obtenirNom() << "." << std::endl;
                     std::cout << "Vous remportez le combat sans le tuer." << std::endl;
 
                     this->joueurPtr->ajouterVictoire(false);
                     this->joueurPtr->soigner(this->joueurPtr->obtenirPvMax());
                     std::cout << "Vous recuperez tous vos PV apres le combat." << std::endl;
+                    std::cout << "========================================" << std::endl;
 
                     BestiaryEntry entree(
                         monstre->obtenirNom(),
@@ -586,12 +604,16 @@ void Game::demarrerCombat() {
 
         if (!combatGagne) {
             if (!monstre->estVivant()) {
-                std::cout << "\nLe monstre est vaincu !" << std::endl;
+                std::cout << "\n========================================" << std::endl;
+                std::cout << "               VICTOIRE" << std::endl;
+                std::cout << "========================================" << std::endl;
+                std::cout << "Vous avez vaincu " << monstre->obtenirNom() << "." << std::endl;
                 std::cout << "Vous remportez le combat en tuant le monstre." << std::endl;
 
                 this->joueurPtr->ajouterVictoire(true);
                 this->joueurPtr->soigner(this->joueurPtr->obtenirPvMax());
                 std::cout << "Vous recuperez tous vos PV apres le combat." << std::endl;
+                std::cout << "========================================" << std::endl;
 
                 BestiaryEntry entree(
                     monstre->obtenirNom(),
@@ -630,8 +652,13 @@ void Game::demarrerCombat() {
                           << std::endl;
 
                 if (!this->joueurPtr->estVivant()) {
-                    std::cout << "\nVous avez ete vaincu..." << std::endl;
+                    std::cout << "\n========================================" << std::endl;
+                    std::cout << "                DEFAITE" << std::endl;
+                    std::cout << "========================================" << std::endl;
+                    std::cout << "Vous avez ete vaincu..." << std::endl;
                     std::cout << "La partie est terminee." << std::endl;
+                    std::cout << "========================================" << std::endl;
+
                     this->partieTerminee = true;
                 }
             }

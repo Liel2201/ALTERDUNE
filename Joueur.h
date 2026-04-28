@@ -21,7 +21,7 @@ public:
     int obtenirTues() const;
     int obtenirEpargnes() const;
     void ajouterObjet(Item nouvelObjet);
-    void utiliserObjet(int index);
+    bool utiliserObjet(int index);
     void afficherInventaire() const;
     int obtenirTailleInventaire() const;
 };

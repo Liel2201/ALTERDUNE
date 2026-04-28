@@ -19,6 +19,7 @@ void Player::afficherInfo() const {
 
 void Player::ajouterVictoire(bool mortDuMonstre) {
     this->victoires++;
+
     if (mortDuMonstre) {
         this->tues++;
     } else {
@@ -37,39 +38,49 @@ int Player::obtenirTues() const {
 int Player::obtenirEpargnes() const {
     return this->epargnes;
 }
+
 void Player::ajouterObjet(Item nouvelObjet) {
     this->inventaire.push_back(nouvelObjet);
 }
 
-void Player::utiliserObjet(int index) {
+bool Player::utiliserObjet(int index) {
     if (index < 0 || index >= (int)this->inventaire.size()) {
         std::cout << "Index invalide !" << std::endl;
-        return;
+        return false;
     }
 
     Item& item = this->inventaire[index];
 
     if (item.obtenirQuantite() <= 0) {
         std::cout << "Vous n'avez plus de " << item.obtenirNom() << " !" << std::endl;
-        return;
+        return false;
     }
 
     if (item.obtenirType() == "HEAL") {
         item.utiliser();
         this->soigner(item.obtenirValeur());
+
         std::cout << "Vous utilisez " << item.obtenirNom()
                   << " et recuperez " << item.obtenirValeur() << " PV !" << std::endl;
+
         std::cout << "PV : " << this->obtenirPv()
                   << "/" << this->obtenirPvMax() << std::endl;
+
+        return true;
     }
+
+    std::cout << "Cet objet ne peut pas etre utilise." << std::endl;
+    return false;
 }
 
 void Player::afficherInventaire() const {
     std::cout << "\n--- INVENTAIRE ---" << std::endl;
+
     if (this->inventaire.empty()) {
         std::cout << "(Vide)" << std::endl;
         return;
     }
+
     for (int i = 0; i < (int)this->inventaire.size(); i++) {
         std::cout << "  [" << (i + 1) << "] ";
         this->inventaire[i].afficherDescription();

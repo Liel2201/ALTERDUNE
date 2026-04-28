@@ -54,11 +54,13 @@ private:
     std::vector<Monster*> monstresDisponibles;
     std::vector<BestiaryEntry> bestiaire;
     std::mt19937 rng;
+    bool partieTerminee;
 
     void initialiserCatalogue();
     bool chargerFichierObjets(std::string chemin);
     bool chargerFichierMonstres(std::string chemin);
     Monster* creerCopieMonstre(Monster* modele);
+    void ouvrirInventaire();
     void afficherMenuPrincipal();
     void demarrerCombat();
     void afficherStatistiques();

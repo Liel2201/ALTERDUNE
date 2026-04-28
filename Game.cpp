@@ -295,7 +295,20 @@ void Game::lancer() {
 }
 
 void Game::demarrerCombat() {
-    std::cout << "\n[Combat en cours de developpement...]" << std::endl;
+    if (this->monstresDisponibles.empty()) {
+        std::cout << "\nAucun monstre disponible. Impossible de lancer un combat." << std::endl;
+        return;
+    }
+
+    std::uniform_int_distribution<int> distribution(0, (int)this->monstresDisponibles.size() - 1);
+    int indiceMonstre = distribution(this->rng);
+
+    Monster* monstre = this->monstresDisponibles[indiceMonstre];
+
+    std::cout << "\nUn monstre apparait !" << std::endl;
+    monstre->afficherInfo();
+
+    std::cout << "\n[Le vrai combat sera ajoute ensuite...]" << std::endl;
 }
 
 void Game::afficherStatistiques() {

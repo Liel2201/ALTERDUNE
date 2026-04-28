@@ -46,6 +46,7 @@ bool Game::chargerFichierObjets(std::string chemin) {
 
         try {
             std::stringstream ss(ligne);
+
             std::string nom;
             std::string type;
             std::string valeurStr;
@@ -59,6 +60,11 @@ bool Game::chargerFichierObjets(std::string chemin) {
                           << " mal formee, ignoree." << std::endl;
                 continue;
             }
+
+            nom = nettoyerTexte(nom);
+            type = nettoyerTexte(type);
+            valeurStr = nettoyerTexte(valeurStr);
+            quantiteStr = nettoyerTexte(quantiteStr);
 
             int valeur = std::stoi(valeurStr);
             int quantite = std::stoi(quantiteStr);
@@ -124,6 +130,18 @@ bool Game::chargerFichierMonstres(std::string chemin) {
             std::getline(ss, a2, ';');
             std::getline(ss, a3, ';');
             std::getline(ss, a4);
+
+            cat = nettoyerTexte(cat);
+            nom = nettoyerTexte(nom);
+            hpStr = nettoyerTexte(hpStr);
+            atkStr = nettoyerTexte(atkStr);
+            defStr = nettoyerTexte(defStr);
+            mercyStr = nettoyerTexte(mercyStr);
+
+            a1 = nettoyerTexte(a1);
+            a2 = nettoyerTexte(a2);
+            a3 = nettoyerTexte(a3);
+            a4 = nettoyerTexte(a4);
 
             int hp = std::stoi(hpStr);
             int atk = std::stoi(atkStr);

@@ -163,19 +163,39 @@ bool Game::chargerFichierMonstres(std::string chemin) {
             }
 
             if (a1 != "-" && !a1.empty()) {
-                m->ajouterActionAct(a1);
+                if (this->catalogueActions.find(a1) != this->catalogueActions.end()) {
+                    m->ajouterActionAct(a1);
+                } else {
+                    std::cout << "Avertissement : action ACT inconnue '" << a1
+                              << "' ligne " << numLigne << ", ignoree." << std::endl;
+                }
             }
 
             if (a2 != "-" && !a2.empty()) {
-                m->ajouterActionAct(a2);
+                if (this->catalogueActions.find(a2) != this->catalogueActions.end()) {
+                    m->ajouterActionAct(a2);
+                } else {
+                    std::cout << "Avertissement : action ACT inconnue '" << a2
+                              << "' ligne " << numLigne << ", ignoree." << std::endl;
+                }
             }
 
             if (a3 != "-" && !a3.empty()) {
-                m->ajouterActionAct(a3);
+                if (this->catalogueActions.find(a3) != this->catalogueActions.end()) {
+                    m->ajouterActionAct(a3);
+                } else {
+                    std::cout << "Avertissement : action ACT inconnue '" << a3
+                              << "' ligne " << numLigne << ", ignoree." << std::endl;
+                }
             }
 
             if (a4 != "-" && !a4.empty()) {
-                m->ajouterActionAct(a4);
+                if (this->catalogueActions.find(a4) != this->catalogueActions.end()) {
+                    m->ajouterActionAct(a4);
+                } else {
+                    std::cout << "Avertissement : action ACT inconnue '" << a4
+                              << "' ligne " << numLigne << ", ignoree." << std::endl;
+                }
             }
 
             this->monstresDisponibles.push_back(m);

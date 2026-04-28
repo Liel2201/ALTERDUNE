@@ -398,9 +398,23 @@ void Game::demarrerCombat() {
     bool combatGagne = false;
 
     std::cout << "\nUn monstre apparait !" << std::endl;
+    std::cout << monstre->obtenirNom()
+              << " [" << monstre->obtenirCategorie() << "]"
+              << std::endl;
 
     while (monstre->estVivant() && this->joueurPtr->estVivant() && !combatGagne) {
-        monstre->afficherInfo();
+        std::cout << "\n--- ETAT DU COMBAT ---" << std::endl;
+        std::cout << "Joueur  : " << this->joueurPtr->obtenirPv()
+                  << " / " << this->joueurPtr->obtenirPvMax()
+                  << " PV" << std::endl;
+
+        std::cout << "Monstre : " << monstre->obtenirNom()
+                  << " | " << monstre->obtenirPv()
+                  << " / " << monstre->obtenirPvMax()
+                  << " PV"
+                  << " | Mercy : " << monstre->obtenirJaugeMercy()
+                  << " / " << monstre->obtenirObjectifMercy()
+                  << std::endl;
 
         int choix = 0;
         bool choixValide = false;
@@ -430,6 +444,11 @@ void Game::demarrerCombat() {
                 } else {
                     monstre->subirDegats(degats);
                     std::cout << "Vous infligez " << degats << " degats au monstre." << std::endl;
+                    std::cout << "PV du monstre : "
+                              << monstre->obtenirPv()
+                              << " / "
+                              << monstre->obtenirPvMax()
+                              << std::endl;
                 }
 
                 choixValide = true;
@@ -478,7 +497,11 @@ void Game::demarrerCombat() {
                                 std::cout << "La Mercy ne change pas." << std::endl;
                             }
 
-                            monstre->afficherInfo();
+                            std::cout << "Mercy du monstre : "
+                                      << monstre->obtenirJaugeMercy()
+                                      << " / "
+                                      << monstre->obtenirObjectifMercy()
+                                      << std::endl;
 
                             actionValide = true;
                             choixValide = true;
@@ -600,7 +623,11 @@ void Game::demarrerCombat() {
                     std::cout << "Le monstre vous inflige " << degatsMonstre << " degats." << std::endl;
                 }
 
-                this->joueurPtr->afficherInfo();
+                std::cout << "Vos PV : "
+                          << this->joueurPtr->obtenirPv()
+                          << " / "
+                          << this->joueurPtr->obtenirPvMax()
+                          << std::endl;
 
                 if (!this->joueurPtr->estVivant()) {
                     std::cout << "\nVous avez ete vaincu..." << std::endl;

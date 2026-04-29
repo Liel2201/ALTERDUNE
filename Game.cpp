@@ -1,11 +1,13 @@
 #include "Game.h"
+using namespace std;
+
 
 Game::Game() {
     this->joueurPtr = nullptr;
     this->partieTerminee = false;
 
-    std::random_device rd;
-    this->rng = std::mt19937(rd());
+    random_device rd;
+    this->rng = mt19937(rd());
 
     this->initialiserCatalogue();
 }
@@ -31,18 +33,18 @@ void Game::initialiserCatalogue() {
     this->catalogueActions.insert({"THREATEN", ActAction("THREATEN", "Vous menacez le monstre du regard. Il serre les poings.", -15)});
 }
 
-bool Game::chargerFichierObjets(std::string chemin) {
-    std::ifstream fichier(chemin);
+bool Game::chargerFichierObjets(string chemin) {
+    ifstream fichier(chemin);
 
     if (!fichier.is_open()) {
-        std::cout << "Erreur : impossible d'ouvrir le fichier '" << chemin << "'" << std::endl;
+        cout << "Erreur : impossible d'ouvrir le fichier '" << chemin << "'" << endl;
         return false;
     }
 
-    std::string ligne;
+    string ligne;
     int numLigne = 0;
 
-    while (std::getline(fichier, ligne)) {
+    while (getline(fichier, ligne)) {
         numLigne++;
 
         if (ligne.empty()) {
@@ -50,19 +52,19 @@ bool Game::chargerFichierObjets(std::string chemin) {
         }
 
         try {
-            std::stringstream ss(ligne);
+            stringstream ss(ligne);
 
-            std::string nom;
-            std::string type;
-            std::string valeurStr;
-            std::string quantiteStr;
+            string nom;
+            string type;
+            string valeurStr;
+            string quantiteStr;
 
-            if (!std::getline(ss, nom, ';') ||
-                !std::getline(ss, type, ';') ||
-                !std::getline(ss, valeurStr, ';') ||
-                (!std::getline(ss, quantiteStr, ';') && !std::getline(ss, quantiteStr))) {
-                std::cout << "Avertissement : items.csv ligne " << numLigne
-                          << " mal formee, ignoree." << std::endl;
+            if (!getline(ss, nom, ';') ||
+                !getline(ss, type, ';') ||
+                !getline(ss, valeurStr, ';') ||
+                (!getline(ss, quantiteStr, ';') && !getline(ss, quantiteStr))) {
+                cout << "Avertissement : items.csv ligne " << numLigne
+                          << " mal formee, ignoree." << endl;
                 continue;
             }
 
@@ -71,15 +73,15 @@ bool Game::chargerFichierObjets(std::string chemin) {
             valeurStr = nettoyerTexte(valeurStr);
             quantiteStr = nettoyerTexte(quantiteStr);
 
-            int valeur = std::stoi(valeurStr);
-            int quantite = std::stoi(quantiteStr);
+            int valeur = stoi(valeurStr);
+            int quantite = stoi(quantiteStr);
 
             this->joueurPtr->ajouterObjet(Item(nom, type, valeur, quantite));
 
-        } catch (const std::exception& e) {
-            std::cout << "Avertissement : items.csv ligne " << numLigne
+        } catch (const exception& e) {
+            cout << "Avertissement : items.csv ligne " << numLigne
                       << " contient des valeurs invalides, ignoree. (" << e.what() << ")"
-                      << std::endl;
+                      << endl;
         }
     }
 
@@ -87,18 +89,18 @@ bool Game::chargerFichierObjets(std::string chemin) {
     return true;
 }
 
-bool Game::chargerFichierMonstres(std::string chemin) {
-    std::ifstream fichier(chemin);
+bool Game::chargerFichierMonstres(string chemin) {
+    ifstream fichier(chemin);
 
     if (!fichier.is_open()) {
-        std::cout << "Erreur : impossible d'ouvrir le fichier '" << chemin << "'" << std::endl;
+        cout << "Erreur : impossible d'ouvrir le fichier '" << chemin << "'" << endl;
         return false;
     }
 
-    std::string ligne;
+    string ligne;
     int numLigne = 0;
 
-    while (std::getline(fichier, ligne)) {
+    while (getline(fichier, ligne)) {
         numLigne++;
 
         if (ligne.empty()) {
@@ -106,35 +108,35 @@ bool Game::chargerFichierMonstres(std::string chemin) {
         }
 
         try {
-            std::stringstream ss(ligne);
+            stringstream ss(ligne);
 
-            std::string cat;
-            std::string nom;
-            std::string hpStr;
-            std::string atkStr;
-            std::string defStr;
-            std::string mercyStr;
+            string cat;
+            string nom;
+            string hpStr;
+            string atkStr;
+            string defStr;
+            string mercyStr;
 
-            std::string a1;
-            std::string a2;
-            std::string a3;
-            std::string a4;
+            string a1;
+            string a2;
+            string a3;
+            string a4;
 
-            if (!std::getline(ss, cat, ';') ||
-                !std::getline(ss, nom, ';') ||
-                !std::getline(ss, hpStr, ';') ||
-                !std::getline(ss, atkStr, ';') ||
-                !std::getline(ss, defStr, ';') ||
-                !std::getline(ss, mercyStr, ';')) {
-                std::cout << "Avertissement : monsters.csv ligne " << numLigne
-                          << " mal formee, ignoree." << std::endl;
+            if (!getline(ss, cat, ';') ||
+                !getline(ss, nom, ';') ||
+                !getline(ss, hpStr, ';') ||
+                !getline(ss, atkStr, ';') ||
+                !getline(ss, defStr, ';') ||
+                !getline(ss, mercyStr, ';')) {
+                cout << "Avertissement : monsters.csv ligne " << numLigne
+                          << " mal formee, ignoree." << endl;
                 continue;
             }
 
-            std::getline(ss, a1, ';');
-            std::getline(ss, a2, ';');
-            std::getline(ss, a3, ';');
-            std::getline(ss, a4);
+            getline(ss, a1, ';');
+            getline(ss, a2, ';');
+            getline(ss, a3, ';');
+            getline(ss, a4);
 
             cat = nettoyerTexte(cat);
             nom = nettoyerTexte(nom);
@@ -148,10 +150,10 @@ bool Game::chargerFichierMonstres(std::string chemin) {
             a3 = nettoyerTexte(a3);
             a4 = nettoyerTexte(a4);
 
-            int hp = std::stoi(hpStr);
-            int atk = std::stoi(atkStr);
-            int def = std::stoi(defStr);
-            int mercy = std::stoi(mercyStr);
+            int hp = stoi(hpStr);
+            int atk = stoi(atkStr);
+            int def = stoi(defStr);
+            int mercy = stoi(mercyStr);
 
             Monster* m = nullptr;
 
@@ -162,8 +164,8 @@ bool Game::chargerFichierMonstres(std::string chemin) {
             } else if (cat == "BOSS") {
                 m = new BossMonster(nom, hp, atk, def, mercy);
             } else {
-                std::cout << "Avertissement : monsters.csv ligne " << numLigne
-                          << " categorie inconnue '" << cat << "', ignoree." << std::endl;
+                cout << "Avertissement : monsters.csv ligne " << numLigne
+                          << " categorie inconnue '" << cat << "', ignoree." << endl;
                 continue;
             }
 
@@ -171,8 +173,8 @@ bool Game::chargerFichierMonstres(std::string chemin) {
                 if (this->catalogueActions.find(a1) != this->catalogueActions.end()) {
                     m->ajouterActionAct(a1);
                 } else {
-                    std::cout << "Avertissement : action ACT inconnue '" << a1
-                              << "' ligne " << numLigne << ", ignoree." << std::endl;
+                    cout << "Avertissement : action ACT inconnue '" << a1
+                              << "' ligne " << numLigne << ", ignoree." << endl;
                 }
             }
 
@@ -180,8 +182,8 @@ bool Game::chargerFichierMonstres(std::string chemin) {
                 if (this->catalogueActions.find(a2) != this->catalogueActions.end()) {
                     m->ajouterActionAct(a2);
                 } else {
-                    std::cout << "Avertissement : action ACT inconnue '" << a2
-                              << "' ligne " << numLigne << ", ignoree." << std::endl;
+                    cout << "Avertissement : action ACT inconnue '" << a2
+                              << "' ligne " << numLigne << ", ignoree." << endl;
                 }
             }
 
@@ -189,8 +191,8 @@ bool Game::chargerFichierMonstres(std::string chemin) {
                 if (this->catalogueActions.find(a3) != this->catalogueActions.end()) {
                     m->ajouterActionAct(a3);
                 } else {
-                    std::cout << "Avertissement : action ACT inconnue '" << a3
-                              << "' ligne " << numLigne << ", ignoree." << std::endl;
+                    cout << "Avertissement : action ACT inconnue '" << a3
+                              << "' ligne " << numLigne << ", ignoree." << endl;
                 }
             }
 
@@ -198,17 +200,17 @@ bool Game::chargerFichierMonstres(std::string chemin) {
                 if (this->catalogueActions.find(a4) != this->catalogueActions.end()) {
                     m->ajouterActionAct(a4);
                 } else {
-                    std::cout << "Avertissement : action ACT inconnue '" << a4
-                              << "' ligne " << numLigne << ", ignoree." << std::endl;
+                    cout << "Avertissement : action ACT inconnue '" << a4
+                              << "' ligne " << numLigne << ", ignoree." << endl;
                 }
             }
 
             this->monstresDisponibles.push_back(m);
 
-        } catch (const std::exception& e) {
-            std::cout << "Avertissement : monsters.csv ligne " << numLigne
+        } catch (const exception& e) {
+            cout << "Avertissement : monsters.csv ligne " << numLigne
                       << " contient des valeurs invalides, ignoree. (" << e.what() << ")"
-                      << std::endl;
+                      << endl;
         }
     }
 
@@ -217,55 +219,55 @@ bool Game::chargerFichierMonstres(std::string chemin) {
 }
 
 void Game::afficherMenuPrincipal() {
-    std::cout << "\n=== ALTERDUNE : MENU PRINCIPAL ===" << std::endl;
-    std::cout << "1. Partir au combat" << std::endl;
-    std::cout << "2. Voir mes statistiques" << std::endl;
-    std::cout << "3. Ouvrir l'inventaire" << std::endl;
-    std::cout << "4. Consulter le Bestiaire" << std::endl;
-    std::cout << "5. Quitter" << std::endl;
-    std::cout << "Votre choix : ";
+    cout << "\n=== ALTERDUNE : MENU PRINCIPAL ===" << endl;
+    cout << "1. Partir au combat" << endl;
+    cout << "2. Voir mes statistiques" << endl;
+    cout << "3. Ouvrir l'inventaire" << endl;
+    cout << "4. Consulter le Bestiaire" << endl;
+    cout << "5. Quitter" << endl;
+    cout << "Votre choix : ";
 }
 
 void Game::lancer() {
-    std::string nomJoueur;
+    string nomJoueur;
 
-    std::cout << "========================================" << std::endl;
-    std::cout << "       BIENVENUE DANS ALTERDUNE" << std::endl;
-    std::cout << "========================================" << std::endl;
-    std::cout << "Entrez le nom de votre personnage : ";
-    std::getline(std::cin, nomJoueur);
+    cout << "========================================" << endl;
+    cout << "       BIENVENUE DANS ALTERDUNE" << endl;
+    cout << "========================================" << endl;
+    cout << "Entrez le nom de votre personnage : ";
+    getline(cin, nomJoueur);
 
     this->joueurPtr = new Player(nomJoueur, 100, 15, 5);
 
-    std::cout << "\nChargement des donnees..." << std::endl;
+    cout << "\nChargement des donnees..." << endl;
 
     if (!this->chargerFichierObjets("items.csv")) {
-        std::cout << "Erreur critique : arret du programme." << std::endl;
+        cout << "Erreur critique : arret du programme." << endl;
         return;
     }
 
-    std::cout << "  Items charges avec succes." << std::endl;
+    cout << "  Items charges avec succes." << endl;
 
     if (!this->chargerFichierMonstres("monsters.csv")) {
-        std::cout << "Erreur critique : arret du programme." << std::endl;
+        cout << "Erreur critique : arret du programme." << endl;
         return;
     }
 
-    std::cout << "  Monstres charges avec succes." << std::endl;
-    std::cout << std::endl;
+    cout << "  Monstres charges avec succes." << endl;
+    cout << endl;
 
     this->joueurPtr->afficherInfo();
     this->joueurPtr->afficherInventaire();
 
-    std::string choixTexte;
+    string choixTexte;
     int choix = 0;
 
     while (choix != 5 && !this->partieTerminee) {
         this->afficherMenuPrincipal();
-        std::cin >> choixTexte;
+        cin >> choixTexte;
 
         try {
-            choix = std::stoi(choixTexte);
+            choix = stoi(choixTexte);
 
             switch (choix) {
                 case 1:
@@ -285,16 +287,16 @@ void Game::lancer() {
                     break;
 
                 case 5:
-                    std::cout << "Au revoir !" << std::endl;
+                    cout << "Au revoir !" << endl;
                     break;
 
                 default:
-                    std::cout << "Choix invalide. Veuillez entrer un nombre entre 1 et 5." << std::endl;
+                    cout << "Choix invalide. Veuillez entrer un nombre entre 1 et 5." << endl;
                     break;
             }
 
-        } catch (const std::exception& e) {
-            std::cout << "Saisie invalide. Veuillez entrer un nombre entre 1 et 5." << std::endl;
+        } catch (const exception& e) {
+            cout << "Saisie invalide. Veuillez entrer un nombre entre 1 et 5." << endl;
             choix = 0;
         }
     }
@@ -330,7 +332,7 @@ Monster* Game::creerCopieMonstre(Monster* modele) {
     }
 
     if (copie != nullptr) {
-        std::vector<std::string> actions = modele->obtenirIdsActions();
+        vector<string> actions = modele->obtenirIdsActions();
 
         for (int i = 0; i < (int)actions.size(); i++) {
             copie->ajouterActionAct(actions[i]);
@@ -342,7 +344,7 @@ Monster* Game::creerCopieMonstre(Monster* modele) {
 
 void Game::ouvrirInventaire() {
     if (this->joueurPtr->obtenirTailleInventaire() == 0) {
-        std::cout << "\nVotre inventaire est vide." << std::endl;
+        cout << "\nVotre inventaire est vide." << endl;
         return;
     }
 
@@ -352,16 +354,16 @@ void Game::ouvrirInventaire() {
     while (!fini) {
         this->joueurPtr->afficherInventaire();
 
-        std::cout << "\nEntrez le numero de l'objet a utiliser." << std::endl;
-        std::cout << "Entrez 0 pour revenir au menu principal." << std::endl;
-        std::cout << "Votre choix : ";
+        cout << "\nEntrez le numero de l'objet a utiliser." << endl;
+        cout << "Entrez 0 pour revenir au menu principal." << endl;
+        cout << "Votre choix : ";
 
-        std::cin >> choix;
+        cin >> choix;
 
-        if (std::cin.fail()) {
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
-            std::cout << "Saisie invalide. Veuillez entrer un nombre." << std::endl;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Saisie invalide. Veuillez entrer un nombre." << endl;
         } else if (choix == 0) {
             fini = true;
         } else if (choix >= 1 && choix <= this->joueurPtr->obtenirTailleInventaire()) {
@@ -370,164 +372,164 @@ void Game::ouvrirInventaire() {
             if (objetUtilise) {
                 fini = true;
             } else {
-                std::cout << "Veuillez choisir un objet utilisable." << std::endl;
+                cout << "Veuillez choisir un objet utilisable." << endl;
             }
         } else {
-            std::cout << "Choix invalide. Veuillez choisir un numero de la liste." << std::endl;
+            cout << "Choix invalide. Veuillez choisir un numero de la liste." << endl;
         }
     }
 }
 
 void Game::demarrerCombat() {
     if (this->monstresDisponibles.empty()) {
-        std::cout << "\nAucun monstre disponible. Impossible de lancer un combat." << std::endl;
+        cout << "\nAucun monstre disponible. Impossible de lancer un combat." << endl;
         return;
     }
 
-    std::uniform_int_distribution<int> distribution(0, (int)this->monstresDisponibles.size() - 1);
+    uniform_int_distribution<int> distribution(0, (int)this->monstresDisponibles.size() - 1);
     int indiceMonstre = distribution(this->rng);
 
     Monster* modele = this->monstresDisponibles[indiceMonstre];
     Monster* monstre = this->creerCopieMonstre(modele);
 
     if (monstre == nullptr) {
-        std::cout << "\nErreur : impossible de creer une copie du monstre." << std::endl;
+        cout << "\nErreur : impossible de creer une copie du monstre." << endl;
         return;
     }
 
     bool combatGagne = false;
 
-    std::cout << "\n========================================" << std::endl;
-    std::cout << "                COMBAT" << std::endl;
-    std::cout << "========================================" << std::endl;
-    std::cout << "Un monstre apparait !" << std::endl;
-    std::cout << "Nom       : " << monstre->obtenirNom() << std::endl;
-    std::cout << "Categorie : " << monstre->obtenirCategorie() << std::endl;
-    std::cout << "========================================" << std::endl;
+    cout << "\n========================================" << endl;
+    cout << "                COMBAT" << endl;
+    cout << "========================================" << endl;
+    cout << "Un monstre apparait !" << endl;
+    cout << "Nom       : " << monstre->obtenirNom() << endl;
+    cout << "Categorie : " << monstre->obtenirCategorie() << endl;
+    cout << "========================================" << endl;
 
     while (monstre->estVivant() && this->joueurPtr->estVivant() && !combatGagne) {
-        std::cout << "\n------------- ETAT DU COMBAT ------------" << std::endl;
-        std::cout << "Joueur  : "
+        cout << "\n------------- ETAT DU COMBAT ------------" << endl;
+        cout << "Joueur  : "
                   << this->joueurPtr->obtenirPv()
                   << " / "
                   << this->joueurPtr->obtenirPvMax()
-                  << " PV" << std::endl;
+                  << " PV" << endl;
 
-        std::cout << "Monstre : "
+        cout << "Monstre : "
                   << monstre->obtenirNom()
                   << " | "
                   << monstre->obtenirPv()
                   << " / "
                   << monstre->obtenirPvMax()
-                  << " PV" << std::endl;
+                  << " PV" << endl;
 
-        std::cout << "Mercy   : "
+        cout << "Mercy   : "
                   << monstre->obtenirJaugeMercy()
                   << " / "
                   << monstre->obtenirObjectifMercy()
-                  << std::endl;
-        std::cout << "-----------------------------------------" << std::endl;
+                  << endl;
+        cout << "-----------------------------------------" << endl;
 
         int choix = 0;
         bool choixValide = false;
 
         while (!choixValide) {
-            std::cout << "\n--------------- ACTIONS ----------------" << std::endl;
-            std::cout << "1. FIGHT" << std::endl;
-            std::cout << "2. ACT" << std::endl;
-            std::cout << "3. ITEM" << std::endl;
-            std::cout << "4. MERCY" << std::endl;
-            std::cout << "-----------------------------------------" << std::endl;
-            std::cout << "Votre choix : ";
+            cout << "\n--------------- ACTIONS ----------------" << endl;
+            cout << "1. FIGHT" << endl;
+            cout << "2. ACT" << endl;
+            cout << "3. ITEM" << endl;
+            cout << "4. MERCY" << endl;
+            cout << "-----------------------------------------" << endl;
+            cout << "Votre choix : ";
 
-            std::cin >> choix;
+            cin >> choix;
 
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore(10000, '\n');
-                std::cout << "Saisie invalide. Veuillez entrer un nombre entre 1 et 4." << std::endl;
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Saisie invalide. Veuillez entrer un nombre entre 1 et 4." << endl;
             } else if (choix == 1) {
-                std::cout << "\nVous attaquez le monstre !" << std::endl;
+                cout << "\nVous attaquez le monstre !" << endl;
 
-                std::uniform_int_distribution<int> distributionDegats(0, monstre->obtenirPvMax());
+                uniform_int_distribution<int> distributionDegats(0, monstre->obtenirPvMax());
                 int degats = distributionDegats(this->rng);
 
                 if (degats == 0) {
-                    std::cout << "Votre attaque rate ! Aucun degat inflige." << std::endl;
+                    cout << "Votre attaque rate ! Aucun degat inflige." << endl;
                 } else {
                     monstre->subirDegats(degats);
-                    std::cout << "Vous infligez " << degats << " degats au monstre." << std::endl;
-                    std::cout << "PV du monstre : "
+                    cout << "Vous infligez " << degats << " degats au monstre." << endl;
+                    cout << "PV du monstre : "
                               << monstre->obtenirPv()
                               << " / "
                               << monstre->obtenirPvMax()
-                              << std::endl;
+                              << endl;
                 }
 
                 choixValide = true;
 
             } else if (choix == 2) {
-                std::vector<std::string> actionsDisponibles = monstre->obtenirActDisponibles();
+                vector<string> actionsDisponibles = monstre->obtenirActDisponibles();
 
                 if (actionsDisponibles.empty()) {
-                    std::cout << "\nCe monstre n'a aucune action ACT disponible." << std::endl;
+                    cout << "\nCe monstre n'a aucune action ACT disponible." << endl;
                     choixValide = true;
                 } else {
                     int choixAct = 0;
                     bool actionValide = false;
 
                     while (!actionValide) {
-                        std::cout << "\n------------- ACTIONS ACT --------------" << std::endl;
+                        cout << "\n------------- ACTIONS ACT --------------" << endl;
 
                         for (int i = 0; i < (int)actionsDisponibles.size(); i++) {
-                            std::cout << i + 1 << ". " << actionsDisponibles[i] << std::endl;
+                            cout << i + 1 << ". " << actionsDisponibles[i] << endl;
                         }
 
-                        std::cout << "-----------------------------------------" << std::endl;
-                        std::cout << "Votre choix : ";
-                        std::cin >> choixAct;
+                        cout << "-----------------------------------------" << endl;
+                        cout << "Votre choix : ";
+                        cin >> choixAct;
 
-                        if (std::cin.fail()) {
-                            std::cin.clear();
-                            std::cin.ignore(10000, '\n');
-                            std::cout << "Saisie invalide. Veuillez entrer un nombre." << std::endl;
+                        if (cin.fail()) {
+                            cin.clear();
+                            cin.ignore(10000, '\n');
+                            cout << "Saisie invalide. Veuillez entrer un nombre." << endl;
                         } else if (choixAct >= 1 && choixAct <= (int)actionsDisponibles.size()) {
-                            std::string idAction = actionsDisponibles[choixAct - 1];
+                            string idAction = actionsDisponibles[choixAct - 1];
 
-                            std::map<std::string, ActAction>::iterator itAction;
+                            map<string, ActAction>::iterator itAction;
                             itAction = this->catalogueActions.find(idAction);
 
-                            std::cout << std::endl;
+                            cout << endl;
                             itAction->second.executer();
 
                             int impact = itAction->second.obtenirImpact();
                             monstre->modifierMercy(impact);
 
                             if (impact > 0) {
-                                std::cout << "La Mercy augmente de " << impact << "." << std::endl;
+                                cout << "La Mercy augmente de " << impact << "." << endl;
                             } else if (impact < 0) {
-                                std::cout << "La Mercy diminue de " << -impact << "." << std::endl;
+                                cout << "La Mercy diminue de " << -impact << "." << endl;
                             } else {
-                                std::cout << "La Mercy ne change pas." << std::endl;
+                                cout << "La Mercy ne change pas." << endl;
                             }
 
-                            std::cout << "Mercy du monstre : "
+                            cout << "Mercy du monstre : "
                                       << monstre->obtenirJaugeMercy()
                                       << " / "
                                       << monstre->obtenirObjectifMercy()
-                                      << std::endl;
+                                      << endl;
 
                             actionValide = true;
                             choixValide = true;
                         } else {
-                            std::cout << "Choix invalide. Veuillez choisir un numero de la liste." << std::endl;
+                            cout << "Choix invalide. Veuillez choisir un numero de la liste." << endl;
                         }
                     }
                 }
 
             } else if (choix == 3) {
                 if (this->joueurPtr->obtenirTailleInventaire() == 0) {
-                    std::cout << "\nVotre inventaire est vide." << std::endl;
+                    cout << "\nVotre inventaire est vide." << endl;
                 } else {
                     int choixItem = 0;
                     bool objetUtilise = false;
@@ -535,21 +537,21 @@ void Game::demarrerCombat() {
                     while (!objetUtilise) {
                         this->joueurPtr->afficherInventaire();
 
-                        std::cout << "Choisissez un objet a utiliser : ";
-                        std::cin >> choixItem;
+                        cout << "Choisissez un objet a utiliser : ";
+                        cin >> choixItem;
 
-                        if (std::cin.fail()) {
-                            std::cin.clear();
-                            std::cin.ignore(10000, '\n');
-                            std::cout << "Saisie invalide. Veuillez entrer un nombre." << std::endl;
+                        if (cin.fail()) {
+                            cin.clear();
+                            cin.ignore(10000, '\n');
+                            cout << "Saisie invalide. Veuillez entrer un nombre." << endl;
                         } else if (choixItem >= 1 && choixItem <= this->joueurPtr->obtenirTailleInventaire()) {
                             objetUtilise = this->joueurPtr->utiliserObjet(choixItem - 1);
 
                             if (!objetUtilise) {
-                                std::cout << "Veuillez choisir un objet utilisable." << std::endl;
+                                cout << "Veuillez choisir un objet utilisable." << endl;
                             }
                         } else {
-                            std::cout << "Choix invalide. Veuillez choisir un numero de la liste." << std::endl;
+                            cout << "Choix invalide. Veuillez choisir un numero de la liste." << endl;
                         }
                     }
 
@@ -558,16 +560,16 @@ void Game::demarrerCombat() {
 
             } else if (choix == 4) {
                 if (monstre->estEpargnable()) {
-                    std::cout << "\n========================================" << std::endl;
-                    std::cout << "               VICTOIRE" << std::endl;
-                    std::cout << "========================================" << std::endl;
-                    std::cout << "Vous epargnez " << monstre->obtenirNom() << "." << std::endl;
-                    std::cout << "Vous remportez le combat sans le tuer." << std::endl;
+                    cout << "\n========================================" << endl;
+                    cout << "               VICTOIRE" << endl;
+                    cout << "========================================" << endl;
+                    cout << "Vous epargnez " << monstre->obtenirNom() << "." << endl;
+                    cout << "Vous remportez le combat sans le tuer." << endl;
 
                     this->joueurPtr->ajouterVictoire(false);
                     this->joueurPtr->soigner(this->joueurPtr->obtenirPvMax());
-                    std::cout << "Vous recuperez tous vos PV apres le combat." << std::endl;
-                    std::cout << "========================================" << std::endl;
+                    cout << "Vous recuperez tous vos PV apres le combat." << endl;
+                    cout << "========================================" << endl;
 
                     BestiaryEntry entree(
                         monstre->obtenirNom(),
@@ -587,33 +589,33 @@ void Game::demarrerCombat() {
                         this->partieTerminee = true;
                     }
                 } else {
-                    std::cout << "\nLe monstre n'est pas encore pret a etre epargne." << std::endl;
-                    std::cout << "Mercy actuelle : "
+                    cout << "\nLe monstre n'est pas encore pret a etre epargne." << endl;
+                    cout << "Mercy actuelle : "
                               << monstre->obtenirJaugeMercy()
                               << " / "
                               << monstre->obtenirObjectifMercy()
-                              << std::endl;
+                              << endl;
                 }
 
                 choixValide = true;
 
             } else {
-                std::cout << "\nChoix invalide. Veuillez entrer un nombre entre 1 et 4." << std::endl;
+                cout << "\nChoix invalide. Veuillez entrer un nombre entre 1 et 4." << endl;
             }
         }
 
         if (!combatGagne) {
             if (!monstre->estVivant()) {
-                std::cout << "\n========================================" << std::endl;
-                std::cout << "               VICTOIRE" << std::endl;
-                std::cout << "========================================" << std::endl;
-                std::cout << "Vous avez vaincu " << monstre->obtenirNom() << "." << std::endl;
-                std::cout << "Vous remportez le combat en tuant le monstre." << std::endl;
+                cout << "\n========================================" << endl;
+                cout << "               VICTOIRE" << endl;
+                cout << "========================================" << endl;
+                cout << "Vous avez vaincu " << monstre->obtenirNom() << "." << endl;
+                cout << "Vous remportez le combat en tuant le monstre." << endl;
 
                 this->joueurPtr->ajouterVictoire(true);
                 this->joueurPtr->soigner(this->joueurPtr->obtenirPvMax());
-                std::cout << "Vous recuperez tous vos PV apres le combat." << std::endl;
-                std::cout << "========================================" << std::endl;
+                cout << "Vous recuperez tous vos PV apres le combat." << endl;
+                cout << "========================================" << endl;
 
                 BestiaryEntry entree(
                     monstre->obtenirNom(),
@@ -633,31 +635,31 @@ void Game::demarrerCombat() {
                     this->partieTerminee = true;
                 }
             } else {
-                std::cout << "\nLe monstre attaque !" << std::endl;
+                cout << "\nLe monstre attaque !" << endl;
 
-                std::uniform_int_distribution<int> distributionDegatsMonstre(0, this->joueurPtr->obtenirPvMax());
+                uniform_int_distribution<int> distributionDegatsMonstre(0, this->joueurPtr->obtenirPvMax());
                 int degatsMonstre = distributionDegatsMonstre(this->rng);
 
                 if (degatsMonstre == 0) {
-                    std::cout << "Le monstre rate son attaque ! Aucun degat recu." << std::endl;
+                    cout << "Le monstre rate son attaque ! Aucun degat recu." << endl;
                 } else {
                     this->joueurPtr->subirDegats(degatsMonstre);
-                    std::cout << "Le monstre vous inflige " << degatsMonstre << " degats." << std::endl;
+                    cout << "Le monstre vous inflige " << degatsMonstre << " degats." << endl;
                 }
 
-                std::cout << "Vos PV : "
+                cout << "Vos PV : "
                           << this->joueurPtr->obtenirPv()
                           << " / "
                           << this->joueurPtr->obtenirPvMax()
-                          << std::endl;
+                          << endl;
 
                 if (!this->joueurPtr->estVivant()) {
-                    std::cout << "\n========================================" << std::endl;
-                    std::cout << "                DEFAITE" << std::endl;
-                    std::cout << "========================================" << std::endl;
-                    std::cout << "Vous avez ete vaincu..." << std::endl;
-                    std::cout << "La partie est terminee." << std::endl;
-                    std::cout << "========================================" << std::endl;
+                    cout << "\n========================================" << endl;
+                    cout << "                DEFAITE" << endl;
+                    cout << "========================================" << endl;
+                    cout << "Vous avez ete vaincu..." << endl;
+                    cout << "La partie est terminee." << endl;
+                    cout << "========================================" << endl;
 
                     this->partieTerminee = true;
                 }
@@ -673,10 +675,10 @@ void Game::afficherStatistiques() {
 }
 
 void Game::afficherBestiaire() {
-    std::cout << "\n--- BESTIAIRE ---" << std::endl;
+    cout << "\n--- BESTIAIRE ---" << endl;
 
     if (this->bestiaire.empty()) {
-        std::cout << "Aucun monstre rencontre pour le moment." << std::endl;
+        cout << "Aucun monstre rencontre pour le moment." << endl;
     }
 
     for (int i = 0; i < (int)this->bestiaire.size(); i++) {
@@ -689,23 +691,23 @@ bool Game::verifierFinDePartie() const {
 }
 
 void Game::afficherFin() const {
-    std::cout << "\n========================================" << std::endl;
-    std::cout << "              FIN DE PARTIE" << std::endl;
-    std::cout << "========================================" << std::endl;
+    cout << "\n========================================" << endl;
+    cout << "              FIN DE PARTIE" << endl;
+    cout << "========================================" << endl;
 
     if (this->joueurPtr->obtenirTues() == 10) {
-        std::cout << "Fin genocidaire" << std::endl;
-        std::cout << "Vous avez elimine tous les monstres rencontres." << std::endl;
-        std::cout << "Le monde d'ALTERDUNE se souviendra de votre violence." << std::endl;
+        cout << "Fin genocidaire" << endl;
+        cout << "Vous avez elimine tous les monstres rencontres." << endl;
+        cout << "Le monde d'ALTERDUNE se souviendra de votre violence." << endl;
     } else if (this->joueurPtr->obtenirEpargnes() == 10) {
-        std::cout << "Fin pacifiste" << std::endl;
-        std::cout << "Vous avez epargne tous les monstres rencontres." << std::endl;
-        std::cout << "Votre compassion a apaise le monde d'ALTERDUNE." << std::endl;
+        cout << "Fin pacifiste" << endl;
+        cout << "Vous avez epargne tous les monstres rencontres." << endl;
+        cout << "Votre compassion a apaise le monde d'ALTERDUNE." << endl;
     } else {
-        std::cout << "Fin neutre" << std::endl;
-        std::cout << "Vous avez parfois combattu, parfois epargne." << std::endl;
-        std::cout << "Votre aventure laisse derriere elle un monde incertain." << std::endl;
+        cout << "Fin neutre" << endl;
+        cout << "Vous avez parfois combattu, parfois epargne." << endl;
+        cout << "Votre aventure laisse derriere elle un monde incertain." << endl;
     }
 
-    std::cout << "========================================" << std::endl;
+    cout << "========================================" << endl;
 }

@@ -1,6 +1,8 @@
 #include "Monster.h"
+using namespace std;
 
-Monster::Monster(std::string _nom, std::string _categorie, int _pvMax,
+
+Monster::Monster(string _nom, string _categorie, int _pvMax,
                  int _attaque, int _defense, int _objectifMercy)
     : Entity(_nom, _pvMax, _attaque, _defense)
 {
@@ -9,7 +11,7 @@ Monster::Monster(std::string _nom, std::string _categorie, int _pvMax,
     this->objectifMercy = _objectifMercy;
 }
 
-std::string Monster::obtenirCategorie() const {
+string Monster::obtenirCategorie() const {
     return this->categorie;
 }
 
@@ -21,15 +23,15 @@ int Monster::obtenirObjectifMercy() const {
     return this->objectifMercy;
 }
 
-std::vector<std::string> Monster::obtenirIdsActions() const {
+vector<string> Monster::obtenirIdsActions() const {
     return this->idsActions;
 }
 
 void Monster::afficherInfo() const {
-    std::cout << "[" << this->categorie << "] " << this->obtenirNom()
+    cout << "[" << this->categorie << "] " << this->obtenirNom()
               << " | PV: " << this->obtenirPv() << "/" << this->obtenirPvMax()
               << " | MERCY: " << this->jaugeMercy << "/" << this->objectifMercy
-              << std::endl;
+              << endl;
 }
 
 void Monster::modifierMercy(int _delta) {
@@ -48,12 +50,12 @@ bool Monster::estEpargnable() const {
     return this->jaugeMercy >= this->objectifMercy;
 }
 
-void Monster::ajouterActionAct(std::string _idAction) {
+void Monster::ajouterActionAct(string _idAction) {
     this->idsActions.push_back(_idAction);
 }
 
-std::vector<std::string> Monster::obtenirActDisponibles() const {
-    std::vector<std::string> disponibles;
+vector<string> Monster::obtenirActDisponibles() const {
+    vector<string> disponibles;
     int nombre = this->obtenirNombreActions();
 
     for (int i = 0; i < nombre && i < (int)this->idsActions.size(); i++) {
@@ -65,21 +67,21 @@ std::vector<std::string> Monster::obtenirActDisponibles() const {
     return disponibles;
 }
 
-NormalMonster::NormalMonster(std::string _nom, int _pvMax, int _atk, int _def, int _objectifMercy)
+NormalMonster::NormalMonster(string _nom, int _pvMax, int _atk, int _def, int _objectifMercy)
     : Monster(_nom, "NORMAL", _pvMax, _atk, _def, _objectifMercy) {}
 
 int NormalMonster::obtenirNombreActions() const {
     return 2;
 }
 
-MiniBossMonster::MiniBossMonster(std::string _nom, int _pvMax, int _atk, int _def, int _objectifMercy)
+MiniBossMonster::MiniBossMonster(string _nom, int _pvMax, int _atk, int _def, int _objectifMercy)
     : Monster(_nom, "MINIBOSS", _pvMax, _atk, _def, _objectifMercy) {}
 
 int MiniBossMonster::obtenirNombreActions() const {
     return 3;
 }
 
-BossMonster::BossMonster(std::string _nom, int _pvMax, int _atk, int _def, int _objectifMercy)
+BossMonster::BossMonster(string _nom, int _pvMax, int _atk, int _def, int _objectifMercy)
     : Monster(_nom, "BOSS", _pvMax, _atk, _def, _objectifMercy) {}
 
 int BossMonster::obtenirNombreActions() const {

@@ -2,16 +2,18 @@
 #define ACTACTION_H
 
 #include "Utilitaires.h"
+using namespace std;
+
 
 class ActAction {
 private:
-    std::string id;          
-    std::string texte;       
+    string id;          
+    string texte;       
     int impactMercy;         
 
 public:
-    ActAction(std::string _id, std::string _texte, int _impact);
-    std::string obtenirId() const;
+    ActAction(string _id, string _texte, int _impact);
+    string obtenirId() const;
     int obtenirImpact() const;
     void executer() const;
 };

@@ -1,6 +1,8 @@
 #include "Utilitaires.h"
+using namespace std;
 
-std::string nettoyerTexte(std::string texte) {
+
+string nettoyerTexte(string texte) {
     while (!texte.empty() && texte[0] == ' ') {
         texte.erase(0, 1);
     }

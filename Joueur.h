@@ -4,16 +4,18 @@
 #include "Entite.h"
 #include "Objet.h"
 #include <vector>
+using namespace std;
+
 
 class Player : public Entity {
 private:
     int tues;
     int epargnes;
     int victoires;
-    std::vector<Item> inventaire;
+    vector<Item> inventaire;
 
 public:
-    Player(std::string _nom, int _pvMax, int _attaque, int _defense);
+    Player(string _nom, int _pvMax, int _attaque, int _defense);
 
     void afficherInfo() const override;
     void ajouterVictoire(bool mortDuMonstre);

@@ -1,6 +1,8 @@
 #include "Entite.h"
+using namespace std;
 
-Entity::Entity(std::string _nom, int _pvMax, int _attaque, int _defense) {
+
+Entity::Entity(string _nom, int _pvMax, int _attaque, int _defense) {
     this->nom = _nom;
     this->pvMax = _pvMax;
     this->pv = _pvMax;
@@ -8,7 +10,7 @@ Entity::Entity(std::string _nom, int _pvMax, int _attaque, int _defense) {
     this->defense = _defense;
 }
 
-std::string Entity::obtenirNom() const {
+string Entity::obtenirNom() const {
     return this->nom;
 }
 

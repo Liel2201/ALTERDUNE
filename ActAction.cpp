@@ -1,12 +1,14 @@
 #include "ActAction.h"
+using namespace std;
 
-ActAction::ActAction(std::string _id, std::string _texte, int _impact) {
+
+ActAction::ActAction(string _id, string _texte, int _impact) {
     this->id = _id;
     this->texte = _texte;
     this->impactMercy = _impact;
 }
 
-std::string ActAction::obtenirId() const {
+string ActAction::obtenirId() const {
     return this->id;
 }
 
@@ -15,5 +17,5 @@ int ActAction::obtenirImpact() const {
 }
 
 void ActAction::executer() const {
-    std::cout << ">> " << this->texte << std::endl;
+    cout << ">> " << this->texte << endl;
 }

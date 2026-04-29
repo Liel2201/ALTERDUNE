@@ -2,19 +2,21 @@
 #define OBJET_H
 
 #include "Utilitaires.h"
+using namespace std;
+
 
 class Item {
 private:
-    std::string nom;
-    std::string type;   
+    string nom;
+    string type;   
     int valeur;         
     int quantite;
 
 public:
-    Item(std::string _nom, std::string _type, int _valeur, int _quantite);
+    Item(string _nom, string _type, int _valeur, int _quantite);
 
-    std::string obtenirNom() const;
-    std::string obtenirType() const;
+    string obtenirNom() const;
+    string obtenirType() const;
     int obtenirValeur() const;
     int obtenirQuantite() const;
 

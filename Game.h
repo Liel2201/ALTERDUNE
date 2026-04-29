@@ -7,19 +7,20 @@
 #include "Objet.h"
 #include "ActAction.h"
 #include <map>
+using namespace std;
+
 
 class BestiaryEntry {
 private:
-    std::string nomMonstre;
-    std::string categorie;
+    string nomMonstre;
+    string categorie;
     int pvMax;
     int attaque;
     int defense;
     bool aEteTue;
 
 public:
-    BestiaryEntry(std::string _nom, std::string _categorie,
-                  int _pvMax, int _atk, int _def, bool _tue) {
+    BestiaryEntry(string _nom, string _categorie, int _pvMax, int _atk, int _def, bool _tue) {
         this->nomMonstre = _nom;
         this->categorie = _categorie;
         this->pvMax = _pvMax;
@@ -29,7 +30,7 @@ public:
     }
 
     void afficher() const {
-        std::string resultat;
+        string resultat;
 
         if (this->aEteTue) {
             resultat = "Tue";
@@ -37,28 +38,28 @@ public:
             resultat = "Epargne";
         }
 
-        std::cout << "- " << this->nomMonstre
+        cout << "- " << this->nomMonstre
                   << " [" << this->categorie << "]"
                   << " | PV Max: " << this->pvMax
                   << " | ATK: " << this->attaque
                   << " | DEF: " << this->defense
                   << " | Resultat: " << resultat
-                  << std::endl;
+                  << endl;
     }
 };
 
 class Game {
 private:
     Player* joueurPtr;
-    std::map<std::string, ActAction> catalogueActions;
-    std::vector<Monster*> monstresDisponibles;
-    std::vector<BestiaryEntry> bestiaire;
-    std::mt19937 rng;
+    map<string, ActAction> catalogueActions;
+    vector<Monster*> monstresDisponibles;
+    vector<BestiaryEntry> bestiaire;
+    mt19937 rng;
     bool partieTerminee;
 
     void initialiserCatalogue();
-    bool chargerFichierObjets(std::string chemin);
-    bool chargerFichierMonstres(std::string chemin);
+    bool chargerFichierObjets(string chemin);
+    bool chargerFichierMonstres(string chemin);
     Monster* creerCopieMonstre(Monster* modele);
     void ouvrirInventaire();
     void afficherMenuPrincipal();

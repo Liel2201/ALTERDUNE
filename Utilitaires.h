@@ -9,7 +9,9 @@
 #include <sstream>
 #include <algorithm>
 #include <random>
+using namespace std;
 
-std::string nettoyerTexte(std::string texte);
+
+string nettoyerTexte(string texte);
 
 #endif

@@ -2,20 +2,22 @@
 #define ENTITE_H
 
 #include "Utilitaires.h"
+using namespace std;
+
 
 class Entity {
 private:
-    std::string nom;
+    string nom;
     int pv;
     int pvMax;
     int attaque;
     int defense;
 
 public:
-    Entity(std::string _nom, int _pvMax, int _attaque, int _defense);
+    Entity(string _nom, int _pvMax, int _attaque, int _defense);
     virtual ~Entity() {}
 
-    std::string obtenirNom() const;
+    string obtenirNom() const;
     int obtenirPv() const;
     int obtenirPvMax() const;
     int obtenirAttaque() const;
